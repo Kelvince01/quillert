@@ -2,43 +2,23 @@ export type Post = {
     id: number;
     date: string;
     date_gmt: string;
-    guid: {
-        rendered: string;
-    };
+    guid: string;
     modified: string;
     modified_gmt: string;
     slug: string;
-    status: "publish" | "future" | "draft" | "pending" | "private";
+    status: 'publish' | 'future' | 'draft' | 'pending' | 'private';
     type: string;
     link: string;
-    title: {
-        rendered: string;
-    };
-    content: {
-        rendered: string;
-        protected: boolean;
-    };
-    excerpt: {
-        rendered: string;
-        protected: boolean;
-    };
+    title: string;
+    content: string;
+    excerpt: string;
     author: number;
     featured_media: number;
-    comment_status: "open" | "closed";
-    ping_status: "open" | "closed";
+    comment_status: 'open' | 'closed';
+    ping_status: 'open' | 'closed';
     sticky: boolean;
     template: string;
-    format:
-        | "standard"
-        | "aside"
-        | "chat"
-        | "gallery"
-        | "link"
-        | "image"
-        | "quote"
-        | "status"
-        | "video"
-        | "audio";
+    format: 'standard' | 'aside' | 'chat' | 'gallery' | 'link' | 'image' | 'quote' | 'status' | 'video' | 'audio';
     meta: any[];
     categories: number[];
     tags: number[];
@@ -51,7 +31,7 @@ export type Category = {
     link: string;
     name: string;
     slug: string;
-    taxonomy: "category";
+    taxonomy: 'category';
     parent: number;
     meta: any[];
 };
@@ -63,7 +43,7 @@ export type Tag = {
     link: string;
     name: string;
     slug: string;
-    taxonomy: "post_tag";
+    taxonomy: 'post_tag';
     meta: any[];
 };
 
@@ -71,32 +51,22 @@ export type Page = {
     id: number;
     date: string;
     date_gmt: string;
-    guid: {
-        rendered: string;
-    };
+    guid: string;
     modified: string;
     modified_gmt: string;
     slug: string;
-    status: "publish" | "future" | "draft" | "pending" | "private";
+    status: 'publish' | 'future' | 'draft' | 'pending' | 'private';
     type: string;
     link: string;
-    title: {
-        rendered: string;
-    };
-    content: {
-        rendered: string;
-        protected: boolean;
-    };
-    excerpt: {
-        rendered: string;
-        protected: boolean;
-    };
+    title: string;
+    content: string;
+    excerpt: string;
     author: number;
     featured_media: number;
     parent: number;
     menu_order: number;
-    comment_status: "open" | "closed";
-    ping_status: "open" | "closed";
+    comment_status: 'open' | 'closed';
+    ping_status: 'open' | 'closed';
     template: string;
     meta: any[];
 };
@@ -172,7 +142,7 @@ export type TemplatePart = {
         rendered: string;
     };
     description: string;
-    status: "publish" | "future" | "draft" | "pending" | "private";
+    status: 'publish' | 'future' | 'draft' | 'pending' | 'private';
     wp_id: number;
     has_theme_file: boolean;
     author: number;
@@ -202,13 +172,9 @@ export type FeaturedMedia = {
     slug: string;
     type: string;
     link: string;
-    title: {
-        rendered: string;
-    };
+    title: string;
     author: number;
-    caption: {
-        rendered: string;
-    };
+    caption: string;
     alt_text: string;
     media_type: string;
     mime_type: string;

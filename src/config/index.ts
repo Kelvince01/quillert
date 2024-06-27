@@ -1,2 +1,2 @@
-export const TITLE = 'Quillert'
-export const DESCRIPTION = 'Fascinating every time'
+export const TITLE = 'Quillert';
+export const DESCRIPTION = 'Fascinating every time';
