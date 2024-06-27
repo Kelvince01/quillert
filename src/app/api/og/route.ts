@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
-import Logo from '../../../../../public/app-logo.png';
-import homepageImage from '../../../../../public/quillert-homepage.png';
+import Logo from '../../../../public/app-logo.png';
+import homepageImage from '../../../../public/quillert-homepage.png';
 import { RenderIMGEl } from '@/components/OGImgEl';
 import { getURL } from '@/utils/helpers';
 
