@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "eslint --fix 'src/**/*.{jsx,ts,tsx}'",
     "format:fix": "prettier --write \"./src/**/*.{js,ts,tsx,d.ts}\"",
     "supabase:generate-types": "npx supabase gen types typescript --linked --schema=public > src/types/database.types.ts"
   },

@@ -11,7 +11,9 @@ import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
-const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+const defaultUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000';
 const siteOgImage = `${defaultUrl}/api/og`;
 
 export const metadata: Metadata = {
@@ -42,7 +44,7 @@ export const metadata: Metadata = {
             url: '/favicon.ico'
         }
     ],
-    manifest: `${defaultUrl}/site.webmanifest`,
+    // manifest: `${defaultUrl}/site.webmanifest`,
     openGraph: {
         url: defaultUrl,
         title: TITLE,
@@ -81,7 +83,12 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={cn('min-h-screen font-sans antialiased', inter.variable)}>
-                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
                     <Nav />
                     <Main>{children}</Main>
                     <Footer />

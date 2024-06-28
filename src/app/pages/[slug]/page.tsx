@@ -4,7 +4,11 @@ import { Metadata } from 'next';
 
 import BackButton from '@/components/back';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+    params
+}: {
+    params: { slug: string };
+}): Promise<Metadata> {
     const page = await getPageBySlug(params.slug);
     return {
         title: page.title,

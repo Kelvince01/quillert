@@ -18,7 +18,17 @@ export type Post = {
     ping_status: 'open' | 'closed';
     sticky: boolean;
     template: string;
-    format: 'standard' | 'aside' | 'chat' | 'gallery' | 'link' | 'image' | 'quote' | 'status' | 'video' | 'audio';
+    format:
+        | 'standard'
+        | 'aside'
+        | 'chat'
+        | 'gallery'
+        | 'link'
+        | 'image'
+        | 'quote'
+        | 'status'
+        | 'video'
+        | 'audio';
     meta: any[];
     categories: number[];
     tags: number[];

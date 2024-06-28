@@ -35,15 +35,21 @@ const ExampleJsx = () => {
                 href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F9d8dev%2Fnext-wp&env=WORDPRESS_URL,WORDPRESS_HOSTNAME&envDescription=Add%20WordPress%20URL%20with%20Rest%20API%20enabled%20(ie.%20https%3A%2F%2Fwp.example.com)%20abd%20the%20hostname%20for%20Image%20rendering%20in%20Next%20JS%20(ie.%20wp.example.com)&project-name=next-wp&repository-name=next-wp&demo-title=Next%20JS%20and%20WordPress%20Starter&demo-url=https%3A%2F%2Fwp.9d8.dev"
             >
                 {/* eslint-disable-next-line */}
-                <img className="not-prose my-4" src="https://vercel.com/button" alt="Deploy with Vercel" />
+                <img
+                    className="not-prose my-4"
+                    src="https://vercel.com/button"
+                    alt="Deploy with Vercel"
+                />
             </a>
             <p>
-                This is <a href="https://github.com/Kelvince01/quillert">Quillert</a>, created as a way to build
-                Supabase with Next.js at rapid speed. This starter is designed with{' '}
-                <a href="https://ui.shadcn.com">shadcn/ui</a>, <a href="https://github.com/brijr/craft">brijr/craft</a>,
-                and Tailwind CSS. Use <a href="https://components.bridger.to">brijr/components</a> to build your site
-                with prebuilt components. The data fetching and typesafety is handled in <code>lib/blog.ts</code> and{' '}
-                <code>lib/blog.d.ts</code>. Questions? Email themikrochip1@gmail.com
+                This is <a href="https://github.com/Kelvince01/quillert">Quillert</a>, created as a
+                way to build Supabase with Next.js at rapid speed. This starter is designed with{' '}
+                <a href="https://ui.shadcn.com">shadcn/ui</a>,{' '}
+                <a href="https://github.com/brijr/craft">brijr/craft</a>, and Tailwind CSS. Use{' '}
+                <a href="https://components.bridger.to">brijr/components</a> to build your site with
+                prebuilt components. The data fetching and typesafety is handled in{' '}
+                <code>lib/blog.ts</code> and <code>lib/blog.d.ts</code>. Questions? Email
+                themikrochip1@gmail.com
             </p>
             <div className="grid md:grid-cols-3 gap-4 mt-6 not-prose">
                 <Link
@@ -52,7 +58,10 @@ const ExampleJsx = () => {
                 >
                     <Pen size={32} />
                     <span>
-                        Posts <span className="block text-sm text-muted-foreground">All posts from your WordPress</span>
+                        Posts{' '}
+                        <span className="block text-sm text-muted-foreground">
+                            All posts from your WordPress
+                        </span>
                     </span>
                 </Link>
                 <Link
@@ -62,7 +71,9 @@ const ExampleJsx = () => {
                     <File size={32} />
                     <span>
                         Pages{' '}
-                        <span className="block text-sm text-muted-foreground">Custom pages from your WordPress</span>
+                        <span className="block text-sm text-muted-foreground">
+                            Custom pages from your WordPress
+                        </span>
                     </span>
                 </Link>
                 <Link
@@ -84,7 +95,9 @@ const ExampleJsx = () => {
                     <Tag size={32} />
                     <span>
                         Tags{' '}
-                        <span className="block text-sm text-muted-foreground">Content by tags from your WordPress</span>
+                        <span className="block text-sm text-muted-foreground">
+                            Content by tags from your WordPress
+                        </span>
                     </span>
                 </Link>
                 <Link
@@ -94,7 +107,9 @@ const ExampleJsx = () => {
                     <Boxes size={32} />
                     <span>
                         Categories{' '}
-                        <span className="block text-sm text-muted-foreground">Categories from your Supabase DB</span>
+                        <span className="block text-sm text-muted-foreground">
+                            Categories from your Supabase DB
+                        </span>
                     </span>
                 </Link>
                 <a
@@ -103,7 +118,10 @@ const ExampleJsx = () => {
                 >
                     <Folder size={32} />
                     <span>
-                        Documentation <span className="block text-sm text-muted-foreground">How to use `quillert`</span>
+                        Documentation{' '}
+                        <span className="block text-sm text-muted-foreground">
+                            How to use `quillert`
+                        </span>
                     </span>
                 </a>
             </div>

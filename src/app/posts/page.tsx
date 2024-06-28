@@ -13,7 +13,11 @@ import { Section, Container } from '@/components/craft';
 import PostCard from '@/components/posts/post-card';
 import FilterPosts from './filter';
 
-export default async function Page({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
+export default async function Page({
+    searchParams
+}: {
+    searchParams: { [key: string]: string | undefined };
+}) {
     const { author, tag, category, page: pageParam } = searchParams;
     const posts = await getAllPosts({ author, tag, category });
     const authors = await getAllAuthors();
@@ -67,7 +71,9 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                             </PaginationItem>
                             <PaginationItem>
                                 <PaginationNext
-                                    className={page === totalPages ? 'pointer-events-none text-muted' : ''}
+                                    className={
+                                        page === totalPages ? 'pointer-events-none text-muted' : ''
+                                    }
                                     href={`/posts?page=${Math.min(page + 1, totalPages)}${
                                         category ? `&category=${category}` : ''
                                     }${author ? `&author=${author}` : ''}${tag ? `&tag=${tag}` : ''}`}

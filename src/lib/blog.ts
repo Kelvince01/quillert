@@ -25,7 +25,9 @@ export async function getAllPosts(filterParams?: {
         }
         if (filterParams.tag) {
             // Assuming you have a 'tags' table with a 'post_id' foreign key
-            query = query.join('tags', 'tags.article_id', '=', 'posts.id').eq('tags.name', filterParams.tag);
+            query = query
+                .join('tags', 'tags.article_id', '=', 'posts.id')
+                .eq('tags.name', filterParams.tag);
         }
         if (filterParams.category) {
             // Assuming you have a 'categories' table with a 'post_id' foreign key

@@ -8,7 +8,11 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Balancer from 'react-wrap-balancer';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+    params
+}: {
+    params: { slug: string };
+}): Promise<Metadata> {
     const post = await getPostBySlug(params.slug);
     return {
         title: post.title,
