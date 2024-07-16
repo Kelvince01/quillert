@@ -1,30 +1,51 @@
+'use client';
+
 import Link from 'next/link';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
-import { SubmitButton } from '@/components/accounts/submit-button';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from '@/components/ui/form';
+import { z } from 'zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
+import GoogleSignInButton from '@/components/accounts/github-auth-button';
 
-export default function Login({ searchParams }: { searchParams: { message: string } }) {
-    const signIn = async (formData: FormData) => {
-        'use server';
+const formSchema = z.object({
+    email: z.string().email({ message: 'Enter a valid email address' }),
+    password: z.string()
+});
 
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
-        const supabase = createClient();
+type UserFormValue = z.infer<typeof formSchema>;
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password
+export default function Login() {
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl');
+    const [loading, setLoading] = useState(false);
+    const defaultValues = {
+        email: 'kelvince05@gmail.com'
+    };
+    const form = useForm<UserFormValue>({
+        resolver: zodResolver(formSchema),
+        defaultValues
+    });
+
+    const onSubmit = async (data: UserFormValue) => {
+        await signIn('credentials', {
+            email: data.email,
+            password: data.password,
+            callbackUrl: callbackUrl ?? '/admin'
         });
-
-        if (error) {
-            return redirect('/accounts/login?message=Could not authenticate user');
-        }
-
-        return redirect('/admin');
     };
 
     return (
@@ -34,93 +55,105 @@ export default function Login({ searchParams }: { searchParams: { message: strin
                 <CardDescription>Enter your email below to login to your account</CardDescription>
             </CardHeader>
             <CardContent>
-                <form className="grid gap-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            placeholder="m@example.com"
-                            required
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                            <Link href="#" className="ml-auto inline-block text-sm underline">
-                                Forgot your password?
-                            </Link>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                        <div className="grid gap-2">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="m@example.com"
+                                                disabled={loading}
+                                                required
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
-                        <Input
-                            id="password"
-                            type="password"
-                            name="password"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
+                        <div className="grid gap-2">
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            <div className="flex items-center">
+                                                <Label htmlFor="password">Password</Label>
+                                                <Link
+                                                    href="#"
+                                                    className="ml-auto inline-block text-sm underline"
+                                                >
+                                                    Forgot your password?
+                                                </Link>
+                                            </div>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="password"
+                                                placeholder="••••••••"
+                                                disabled={loading}
+                                                required
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
 
-                    <SubmitButton
-                        formAction={signIn}
-                        className="w-full"
-                        pendingText="Signing In..."
-                    >
-                        Login
-                    </SubmitButton>
-                    {searchParams?.message && (
-                        <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-                            {searchParams.message}
-                        </p>
-                    )}
-                    <Button variant="outline" className="w-full">
-                        Login with Google
-                    </Button>
-                </form>
+                        <Button type="submit" aria-disabled={loading} className="w-full">
+                            {loading ? 'Signing In...' : 'Login'}
+                        </Button>
+                    </form>
+                </Form>
+
                 <div className="mt-4 text-center text-sm">
                     Don&apos;t have an account?{' '}
-                    <Link href="#" className="underline">
+                    <Link href="/accounts/register" className="underline">
                         Sign up
                     </Link>
                 </div>
+
+                {/*<Button variant="outline" className="mt-4 w-full">*/}
+                {/*    Login with Google*/}
+                {/*</Button>*/}
+
+                <div className="relative mt-4">
+                    <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-2 text-muted-foreground">
+                            Or continue with
+                        </span>
+                    </div>
+                </div>
+                <GoogleSignInButton />
+
+                <p className="mt-4 px-8 text-center text-sm text-muted-foreground">
+                    By clicking continue, you agree to our{' '}
+                    <Link href="/terms" className="underline underline-offset-4 hover:text-primary">
+                        Terms of Service
+                    </Link>{' '}
+                    and{' '}
+                    <Link
+                        href="/privacy"
+                        className="underline underline-offset-4 hover:text-primary"
+                    >
+                        Privacy Policy
+                    </Link>
+                    .
+                </p>
             </CardContent>
         </Card>
     );
 }
-
-/*
-<form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-                <label className="text-md" htmlFor="email">
-                    Email
-                </label>
-                <input
-                    className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                    name="email"
-                    placeholder="you@example.com"
-                    required
-                />
-                <label className="text-md" htmlFor="password">
-                    Password
-                </label>
-                <input
-                    className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                    type="password"
-                    name="password"
-                    placeholder="••••••••"
-                    required
-                />
-                <SubmitButton
-                    formAction={signIn}
-                    className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-                    pendingText="Signing In..."
-                >
-                    Sign In
-                </SubmitButton>
-
-                {searchParams?.message && (
-                    <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-                        {searchParams.message}
-                    </p>
-                )}
-            </form>
- */

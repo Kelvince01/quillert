@@ -14,26 +14,56 @@ export async function getAllPosts(filterParams?: {
     tag?: string;
     category?: string;
 }): Promise<Post[]> {
-    let query = await supabase
-        .from('posts') // Replace 'posts' with your actual table name
-        .select('*');
+    let query: any = await supabase.from('posts').select('*');
 
     // Build query based on filter parameters
     if (filterParams) {
         if (filterParams.author) {
-            query = query.eq('author', filterParams.author);
+            query = await supabase.from('posts').select('*').eq('author', filterParams.author);
         }
+
         if (filterParams.tag) {
-            // Assuming you have a 'tags' table with a 'post_id' foreign key
-            query = query
-                .join('tags', 'tags.article_id', '=', 'posts.id')
-                .eq('tags.name', filterParams.tag);
+            query = await supabase
+                .from('posts')
+                .select('*')
+                .filter('tags', 'cs', `${filterParams.tag}`);
         }
+
         if (filterParams.category) {
-            // Assuming you have a 'categories' table with a 'post_id' foreign key
-            query = query
-                .join('categories', 'categories.article_id', '=', 'posts.id')
-                .eq('categories.name', filterParams.category);
+            query = await supabase
+                .from('posts')
+                .select('*')
+                .filter('categories', 'cs', `${filterParams.category}`);
+        }
+
+        if (filterParams.author && filterParams.tag) {
+            query = await supabase
+                .from('posts')
+                .select('*')
+                .eq('author', filterParams.author)
+                .filter('tags', 'cs', `${filterParams.tag}`);
+        }
+        if (filterParams.author && filterParams.category) {
+            query = await supabase
+                .from('posts')
+                .select('*')
+                .eq('author', filterParams.author)
+                .contains('categories', { id: Number(filterParams.category) });
+        }
+        if (filterParams.category && filterParams.tag) {
+            query = await supabase
+                .from('posts')
+                .select('*')
+                .filter('tags', 'cs', `${filterParams.tag}`)
+                .filter('categories', 'cs', `${filterParams.category}`);
+        }
+        if (filterParams.author && filterParams.tag && filterParams.category) {
+            query = await supabase
+                .from('posts')
+                .select('*')
+                .eq('author', filterParams.author)
+                .filter('tags', 'cs', `${filterParams.tag}`)
+                .filter('categories', 'cs', `${filterParams.category}`);
         }
     }
 
@@ -83,7 +113,7 @@ export async function getAllCategories(): Promise<Category[]> {
         throw error;
     }
 
-    return data || []; // Return empty array if no categories found
+    return data || []; // Return an empty array if no categories found
 }
 
 export async function getCategoryById(id: number): Promise<Category> {
@@ -119,13 +149,7 @@ export async function getPostsByCategory(categoryId: number): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts') // Replace 'posts' with your actual table name
         .select('*')
-        .join(
-            'post_category', // Replace 'post_category' with your actual table name
-            'post_category.post_id',
-            '=',
-            'posts.id'
-        )
-        .eq('post_category.category_id', categoryId);
+        .filter('categories', 'cs', `${categoryId}`);
 
     if (error) {
         throw error;
@@ -139,13 +163,7 @@ export async function getPostsByTag(tagId: number): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts') // Replace 'posts' with your actual table name
         .select('*')
-        .join(
-            'post_tag', // Replace 'post_tag' with your actual table name
-            'post_tag.post_id',
-            '=',
-            'posts.id'
-        )
-        .eq('post_tag.tag_id', tagId);
+        .filter('tags', 'cs', `${tagId}`);
 
     if (error) {
         throw error;
@@ -155,17 +173,10 @@ export async function getPostsByTag(tagId: number): Promise<Post[]> {
 }
 
 export async function getTagsByPost(postId: number): Promise<Tag[]> {
+    const post = await getPostById(postId);
+
     // Assuming a 'post_tag' table with foreign keys
-    const { data, error } = await supabase
-        .from('tags') // Replace 'tags' with your actual table name
-        .select('*')
-        .join(
-            'post_tag', // Replace 'post_tag' with your actual table name
-            'post_tag.tag_id',
-            '=',
-            'tags.id'
-        )
-        .eq('post_tag.post_id', postId);
+    const { data, error } = await supabase.from('tags').select('*').in('id', post.tags);
 
     if (error) {
         throw error;
@@ -295,13 +306,7 @@ export async function getPostsByAuthorSlug(authorSlug: string): Promise<Post[]> 
     const { data, error } = await supabase
         .from('posts') // Replace 'posts' with your actual table name
         .select('*')
-        .join(
-            'post_author', // Replace 'post_author' with your actual table name
-            'post_author.post_id',
-            '=',
-            'posts.id'
-        )
-        .eq('post_author.author_id', author.id);
+        .eq('author', author.id);
 
     if (error) {
         throw error;
@@ -316,13 +321,7 @@ export async function getPostsByCategorySlug(categorySlug: string): Promise<Post
     const { data, error } = await supabase
         .from('posts') // Replace 'posts' with your actual table name
         .select('*')
-        .join(
-            'post_category', // Replace 'post_category' with your actual table name
-            'post_category.post_id',
-            '=',
-            'posts.id'
-        )
-        .eq('post_category.category_id', category.id);
+        .filter('categories', 'cs', `${category.id}`);
 
     if (error) {
         throw error;
@@ -339,13 +338,7 @@ export async function getPostsByTagSlug(tagSlug: string): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts') // Replace 'posts' with your actual table name
         .select('*')
-        .join(
-            'post_tag', // Replace 'post_tag' with your actual table name
-            'post_tag.post_id',
-            '=',
-            'posts.id'
-        )
-        .eq('post_tag.tag_id', tag.id);
+        .filter('tags', 'cs', `${tag.id}`);
 
     if (error) {
         throw error;

@@ -62,7 +62,7 @@ export default function RegisterPage({ searchParams }: { searchParams: { message
 
                     <SubmitButton
                         formAction={signUp}
-                        className="border border-foreground/20 rounded-md px-4 py-2 mb-2"
+                        className="border border-foreground/20 rounded-md px-4 py-2 mb-2 mt-4"
                         pendingText="Signing Up..."
                     >
                         Create an account
@@ -78,7 +78,7 @@ export default function RegisterPage({ searchParams }: { searchParams: { message
                 </form>
                 <div className="mt-4 text-center text-sm">
                     Already have an account?{' '}
-                    <Link href="#" className="underline">
+                    <Link href="/accounts/login" className="underline">
                         Sign in
                     </Link>
                 </div>

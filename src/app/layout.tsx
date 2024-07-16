@@ -4,10 +4,8 @@ import '../styles/globals.css';
 import React from 'react';
 import { DESCRIPTION, TITLE } from '@/config';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import Nav from '@/components/layout/nav';
-import { Main } from '@/components/craft';
-import Footer from '@/components/layout/footer';
 import { cn } from '@/lib/utils';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -82,6 +80,34 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <Script
+                    async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2005196002338454"
+                    crossOrigin="anonymous"
+                    strategy="lazyOnload"
+                />
+                {/* Global Site Tag (gtag.js) - Google Analytics */}
+                <Script
+                    strategy="afterInteractive"
+                    defer
+                    src={`https://www.googletagmanager.com/gtag/js?id=${`G-3HBWMQ557N`}`}
+                />
+                <Script
+                    id="gtag-init"
+                    strategy="afterInteractive"
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag(){dataLayer.push(arguments);}
+                            gtag('js', new Date());
+                            gtag('config', '${`G-3HBWMQ557N`}', {
+                            page_path: window.location.pathname,
+                            });
+                          `
+                    }}
+                />
+            </head>
             <body className={cn('min-h-screen font-sans antialiased', inter.variable)}>
                 <ThemeProvider
                     attribute="class"
@@ -89,9 +115,7 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <Nav />
-                    <Main>{children}</Main>
-                    <Footer />
+                    {children}
                 </ThemeProvider>
             </body>
         </html>
