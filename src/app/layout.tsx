@@ -6,6 +6,7 @@ import { DESCRIPTION, TITLE } from '@/config';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { cn } from '@/lib/utils';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -117,6 +118,7 @@ export default function RootLayout({
                 >
                     {children}
                 </ThemeProvider>
+                <Analytics />
             </body>
         </html>
     );
