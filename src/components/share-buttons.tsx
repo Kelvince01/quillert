@@ -4,14 +4,13 @@ import React from 'react';
 import { EmailShare, FacebookShare, TwitterShare, WhatsappShare } from 'react-share-kit';
 import { Tag } from '@/lib/blog.d';
 import { usePathname } from 'next/navigation';
-import { getURL } from '@/utils/helpers';
 
 export const ShareButtons: React.FC<{ shareUrlSource: string; title: string; tags: Tag[] }> = ({
     shareUrlSource,
     title,
     tags
 }) => {
-    const shareUrl = getURL() + usePathname();
+    const shareUrl = 'https://quillert.com' + usePathname();
 
     return (
         <div className="space-y-4 flex flex-row items-center">

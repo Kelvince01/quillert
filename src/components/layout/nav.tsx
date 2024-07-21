@@ -18,7 +18,7 @@ const Nav = ({ className, children, id }: NavProps) => {
                 className="max-w-5xl mx-auto py-2 px-6 sm:px-8 flex justify-between items-center"
             >
                 <Link className="hover:opacity-75 transition-all flex gap-2 items-center" href="/">
-                    <h2 className="sr-only">next-wp starter</h2>
+                    <h2 className="sr-only">Quillert</h2>
                     <Image
                         src={Logo}
                         alt="Logo"
@@ -39,7 +39,7 @@ const Nav = ({ className, children, id }: NavProps) => {
                         ))}
                     </div>
                     <Button asChild className="hidden sm:flex">
-                        <Link href="">Get Started</Link>
+                        <Link href="">Login</Link>
                     </Button>
                     <MobileNav />
                 </div>
