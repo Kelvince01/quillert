@@ -6,41 +6,163 @@ import Balancer from 'react-wrap-balancer';
 import Link from 'next/link';
 
 // Icons
-import { File, Pen, Tag, Boxes, User, Folder } from 'lucide-react';
+import { File, Pen, Tag, Boxes, User, Folder, ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import PostCard from '@/components/posts/post-card';
+import { getFeaturedPosts, getLatestPosts } from '@/lib/blog';
+import { Post } from '@/lib/blog.d';
 
 // This page is using the craft.tsx component and design system
-export default function Home() {
+export default async function Home() {
+    const featuredPosts = await getFeaturedPosts();
+    const latestPosts = await getLatestPosts();
+
     return (
         <Section>
             <Container>
-                <ExampleJsx />
+                <div className="mx-auto max-w-3xl space-y-6 text-center">
+                    <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+                        Discover the Latest Insights
+                    </h1>
+                    <p className="text-muted-foreground md:text-xl">
+                        Explore our collection of thought-provoking articles and stay ahead of the
+                        curve.
+                    </p>
+                    <Button className="text-white" size="lg" variant="default">
+                        <Link
+                            className="no-underline text-white hover:text-white visited:text-white"
+                            href={`/posts`}
+                            prefetch={false}
+                        >
+                            Read the Blog
+                        </Link>
+                    </Button>
+                </div>
+                <div className="mx-auto max-w-3xl space-y-6 text-center">
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                        Featured Posts
+                    </h2>
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {/*<Card>
+                            <CardContent>
+                                <Image
+                                    src="/placeholder.svg"
+                                    width={400}
+                                    height={225}
+                                    alt="Blog Post"
+                                    className="aspect-video w-full rounded-lg object-cover"
+                                />
+                                <div className="space-y-2 py-4">
+                                    <h3 className="text-lg font-semibold">
+                                        Unlocking the Power of React Hooks
+                                    </h3>
+                                    <p className="text-muted-foreground line-clamp-3">
+                                        Discover how React Hooks can revolutionize your development
+                                        workflow and create more efficient, maintainable
+                                        applications.
+                                    </p>
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button>
+                                    <Link
+                                        href="#"
+                                        className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                                        prefetch={false}
+                                    >
+                                        Read More
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>*/}
+                        {featuredPosts.map((post: Post) => (
+                            <PostCard key={post.id} post={post} />
+                        ))}
+                    </div>
+                </div>
+                <div className="mx-auto max-w-3xl space-y-6">
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                        Recent Posts
+                    </h2>
+                    <div className="grid gap-6">
+                        {/*<Card>
+                            <CardContent className="grid grid-cols-[100px_1fr] gap-4">
+                                <Image
+                                    src="/placeholder.svg"
+                                    width={100}
+                                    height={100}
+                                    alt="Blog Post"
+                                    className="aspect-square w-full rounded-lg object-cover"
+                                />
+                                <div className="space-y-2">
+                                    <h3 className="text-lg font-semibold">
+                                        Unleashing the Power of Serverless Functions
+                                    </h3>
+                                    <p className="text-muted-foreground">
+                                        Published on May 15, 2023
+                                    </p>
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Link
+                                    href="#"
+                                    className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                                    prefetch={false}
+                                >
+                                    Read More
+                                </Link>
+                            </CardFooter>
+                        </Card>*/}
+                        {latestPosts.map((post: Post) => (
+                            <PostCard key={post.id} post={post} />
+                        ))}
+                    </div>
+                </div>
             </Container>
         </Section>
     );
 }
 
 // This is just some example JS to demonstrate automatic styling from brijr/craft
-const ExampleJsx = () => {
+const HomeComponent = () => {
     return (
         <article className="prose-m-none">
+            <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+                <div className="container px-4 md:px-6">
+                    <div className="mx-auto max-w-3xl space-y-6 text-center">
+                        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+                            Discover the Latest Insights
+                        </h1>
+                        <p className="text-muted-foreground md:text-xl">
+                            Explore our collection of thought-provoking articles and stay ahead of
+                            the curve.
+                        </p>
+                        <Link
+                            href="#"
+                            className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                            prefetch={false}
+                        >
+                            Read the Blog
+                        </Link>
+                    </div>
+                </div>
+            </section>
             <h1>
-                <Balancer>
-                    Hello World, welcome to the Next.js and Supabase Starter by{' '}
-                    <a href="https://github.com/Kelvince01">Kelvince</a>.
-                </Balancer>
+                <Balancer>Discover the Latest Insights.</Balancer>
             </h1>
-            {/* Vercel Clone Starter */}
-            <a
-                className="h-16 block"
-                href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F9d8dev%2Fnext-wp&env=WORDPRESS_URL,WORDPRESS_HOSTNAME&envDescription=Add%20WordPress%20URL%20with%20Rest%20API%20enabled%20(ie.%20https%3A%2F%2Fwp.example.com)%20abd%20the%20hostname%20for%20Image%20rendering%20in%20Next%20JS%20(ie.%20wp.example.com)&project-name=next-wp&repository-name=next-wp&demo-title=Next%20JS%20and%20WordPress%20Starter&demo-url=https%3A%2F%2Fwp.9d8.dev"
+            <p className="text-muted-foreground md:text-xl">
+                Explore our collection of thought-provoking articles and stay ahead of the curve.
+            </p>
+            <Link
+                prefetch={false}
+                className="h-8 inline-flex items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                href="/blogs"
             >
-                {/* eslint-disable-next-line */}
-                <img
-                    className="not-prose my-4"
-                    src="https://vercel.com/button"
-                    alt="Deploy with Vercel"
-                />
-            </a>
+                Read the Blog
+                <ArrowRight className="not-prose my-4" />
+            </Link>
             <p>
                 This is <a href="https://github.com/Kelvince01/quillert">Quillert</a>, created as a
                 way to build Supabase with Next.js at rapid speed. This starter is designed with{' '}

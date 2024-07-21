@@ -15,7 +15,7 @@ const Nav = ({ className, children, id }: NavProps) => {
         >
             <div
                 id="nav-container"
-                className="max-w-5xl mx-auto py-4 px-6 sm:px-8 flex justify-between items-center"
+                className="max-w-5xl mx-auto py-2 px-6 sm:px-8 flex justify-between items-center"
             >
                 <Link className="hover:opacity-75 transition-all flex gap-2 items-center" href="/">
                     <h2 className="sr-only">next-wp starter</h2>
@@ -39,7 +39,7 @@ const Nav = ({ className, children, id }: NavProps) => {
                         ))}
                     </div>
                     <Button asChild className="hidden sm:flex">
-                        <Link href="https://github.com/Kelvince01/quillert.git">Get Started</Link>
+                        <Link href="">Get Started</Link>
                     </Button>
                     <MobileNav />
                 </div>

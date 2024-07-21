@@ -1,12 +1,5 @@
 import * as React from 'react';
-
-// cn util
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+import { cn } from '@/lib/utils';
 
 // Layout Component
 type LayoutProps = {

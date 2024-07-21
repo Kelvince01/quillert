@@ -1,7 +1,7 @@
 // Define the menu items
 export const mainMenu = {
     home: '/',
-    about: 'https://github.com/Kelvince01/quillert',
+    about: '/pages/about',
     blog: '/posts'
 };
 

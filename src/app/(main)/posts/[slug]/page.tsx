@@ -1,4 +1,10 @@
-import { getPostBySlug, getFeaturedMediaById, getAuthorById, getCategoryById } from '@/lib/blog';
+import {
+    getPostBySlug,
+    getFeaturedMediaById,
+    getAuthorById,
+    getCategoryById,
+    getTagsByPost
+} from '@/lib/blog';
 
 import { Section, Container, Article, Main } from '@/components/craft';
 import { Metadata } from 'next';
@@ -7,6 +13,7 @@ import { cn } from '@/lib/utils';
 
 import Link from 'next/link';
 import Balancer from 'react-wrap-balancer';
+import { ShareButtons } from '@/components/share-buttons';
 
 export async function generateMetadata({
     params
@@ -30,6 +37,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         year: 'numeric'
     });
     const category = await getCategoryById(post.categories[0]);
+    const tags = await getTagsByPost(post.id);
 
     return (
         <Section>
@@ -61,6 +69,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                     <img className="w-full" src={featuredMedia.source_url} alt={post.title} />
                 </div>
                 <Article dangerouslySetInnerHTML={{ __html: post.content }} />
+                <ShareButtons shareUrlSource={``} title={post.title} tags={tags} />
             </Container>
         </Section>
     );

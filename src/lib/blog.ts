@@ -77,11 +77,7 @@ export async function getAllPosts(filterParams?: {
 }
 
 export async function getPostById(id: number): Promise<Post> {
-    const { data, error } = await supabase
-        .from('posts') // Replace 'posts' with your actual table name
-        .select('*')
-        .eq('id', id)
-        .single();
+    const { data, error } = await supabase.from('posts').select('*').eq('id', id).single();
 
     if (error) {
         throw error;
@@ -91,23 +87,46 @@ export async function getPostById(id: number): Promise<Post> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post> {
-    const { data, error } = await supabase
-        .from('posts') // Replace 'posts' with your actual table name
-        .select('*')
-        .eq('slug', slug)
-        .single();
+    const { data, error } = await supabase.from('posts').select('*').eq('slug', slug).single();
 
     if (error) {
         throw error;
     }
 
-    return data || null; // Return null if no post found
+    return data || null;
+}
+
+export async function getFeaturedPosts(): Promise<Post[]> {
+    const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .eq('sticky', true)
+        .range(0, 2);
+
+    if (error) {
+        throw error;
+    }
+
+    return data || []; // Return an empty array if no categories found
+}
+
+export async function getLatestPosts(): Promise<Post[]> {
+    const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .range(0, 5);
+
+    if (error) {
+        throw error;
+    }
+
+    return data || []; // Return an empty array if no categories found
 }
 
 export async function getAllCategories(): Promise<Category[]> {
-    const { data, error } = await supabase
-        .from('categories') // Replace 'categories' with your actual table name
-        .select('*');
+    const { data, error } = await supabase.from('categories').select('*');
 
     if (error) {
         throw error;
@@ -117,11 +136,7 @@ export async function getAllCategories(): Promise<Category[]> {
 }
 
 export async function getCategoryById(id: number): Promise<Category> {
-    const { data, error } = await supabase
-        .from('categories') // Replace 'categories' with your actual table name
-        .select('*')
-        .eq('id', id)
-        .single();
+    const { data, error } = await supabase.from('categories').select('*').eq('id', id).single();
 
     if (error) {
         throw error;
@@ -131,11 +146,7 @@ export async function getCategoryById(id: number): Promise<Category> {
 }
 
 export async function getCategoryBySlug(slug: string): Promise<Category> {
-    const { data, error } = await supabase
-        .from('categories') // Replace 'categories' with your actual table name
-        .select('*')
-        .eq('slug', slug)
-        .single();
+    const { data, error } = await supabase.from('categories').select('*').eq('slug', slug).single();
 
     if (error) {
         throw error;
@@ -147,7 +158,7 @@ export async function getCategoryBySlug(slug: string): Promise<Category> {
 export async function getPostsByCategory(categoryId: number): Promise<Post[]> {
     // Assuming a 'post_category' table with foreign keys
     const { data, error } = await supabase
-        .from('posts') // Replace 'posts' with your actual table name
+        .from('posts')
         .select('*')
         .filter('categories', 'cs', `${categoryId}`);
 
@@ -161,7 +172,7 @@ export async function getPostsByCategory(categoryId: number): Promise<Post[]> {
 export async function getPostsByTag(tagId: number): Promise<Post[]> {
     // Assuming a 'post_tag' table with foreign keys
     const { data, error } = await supabase
-        .from('posts') // Replace 'posts' with your actual table name
+        .from('posts')
         .select('*')
         .filter('tags', 'cs', `${tagId}`);
 
@@ -303,10 +314,7 @@ export async function getPostsByAuthor(authorId: number): Promise<Post[]> {
 export async function getPostsByAuthorSlug(authorSlug: string): Promise<Post[]> {
     const author = await getAuthorBySlug(authorSlug);
     // Assuming a 'post_author' table with foreign keys
-    const { data, error } = await supabase
-        .from('posts') // Replace 'posts' with your actual table name
-        .select('*')
-        .eq('author', author.id);
+    const { data, error } = await supabase.from('posts').select('*').eq('author', author.id);
 
     if (error) {
         throw error;
@@ -319,7 +327,7 @@ export async function getPostsByCategorySlug(categorySlug: string): Promise<Post
     const category = await getCategoryBySlug(categorySlug);
     // Assuming a 'post_category' table with foreign keys
     const { data, error } = await supabase
-        .from('posts') // Replace 'posts' with your actual table name
+        .from('posts')
         .select('*')
         .filter('categories', 'cs', `${category.id}`);
 
@@ -336,7 +344,7 @@ export async function getPostsByTagSlug(tagSlug: string): Promise<Post[]> {
 
     // Assuming a 'post_tag' table with foreign keys
     const { data, error } = await supabase
-        .from('posts') // Replace 'posts' with your actual table name
+        .from('posts')
         .select('*')
         .filter('tags', 'cs', `${tag.id}`);
 
