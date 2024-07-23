@@ -17,9 +17,9 @@ export default function AuthCallback() {
                 } = await supabase.auth.getSession();
                 if (error) throw error;
                 if (session) {
-                    router.push('/dashboard'); // or wherever you want to redirect after successful sign-in
+                    router.push('/'); // or wherever you want to redirect after successful sign-in
                 } else {
-                    router.push('/login');
+                    router.push('/accounts/login');
                 }
             } catch (error) {
                 console.error('Error handling auth callback:', error);
