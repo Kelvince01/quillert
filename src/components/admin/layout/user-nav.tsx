@@ -1,4 +1,5 @@
 'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,10 +12,11 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from '@/components/admin/layout/providers';
 
 export function UserNav() {
-    const { data: session } = useSession();
+    const { signOut, session } = useSession();
+
     if (session) {
         return (
             <DropdownMenu>
@@ -22,10 +24,10 @@ export function UserNav() {
                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                         <Avatar className="h-8 w-8">
                             <AvatarImage
-                                src={session.user?.user?.image ?? ''}
-                                alt={session.user?.user?.name ?? ''}
+                                src={session.user?.email ?? ''}
+                                alt={session.user?.email ?? ''}
                             />
-                            <AvatarFallback>{session.user?.user?.name?.[0]}</AvatarFallback>
+                            <AvatarFallback>{session.user?.email?.[0]}</AvatarFallback>
                         </Avatar>
                     </Button>
                 </DropdownMenuTrigger>
@@ -33,10 +35,10 @@ export function UserNav() {
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
                             <p className="text-sm font-medium leading-none">
-                                {session.user?.user?.name}
+                                {session.user?.email}
                             </p>
                             <p className="text-xs leading-none text-muted-foreground">
-                                {session.user?.user?.email}
+                                {session.user?.email}
                             </p>
                         </div>
                     </DropdownMenuLabel>
@@ -57,7 +59,7 @@ export function UserNav() {
                         <DropdownMenuItem>New Team</DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => signOut()}>
+                    <DropdownMenuItem onClick={signOut}>
                         Log out
                         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                     </DropdownMenuItem>

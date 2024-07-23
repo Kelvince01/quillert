@@ -1,67 +1,49 @@
-import NextAuth from 'next-auth';
-import { SupabaseAdapter } from '@auth/supabase-adapter';
-import jwt from 'jsonwebtoken';
-import { Adapter } from 'next-auth/adapters';
-import GithubProvider from 'next-auth/providers/github';
-import CredentialProvider from 'next-auth/providers/credentials';
+import { headers } from 'next/headers';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 
-// For more information on each option (and a full list of options) go to
-// https://authjs.dev/reference/core/types#authconfig
-export const { handlers, auth, signIn, signOut } = NextAuth({
-    // https://authjs.dev/getting-started/authentication/oauth
-    providers: [
-        GithubProvider({
-            clientId: process.env.GITHUB_ID ?? '',
-            clientSecret: process.env.GITHUB_SECRET ?? ''
-        }),
-        CredentialProvider({
-            credentials: {
-                email: {
-                    type: 'email'
-                },
-                password: {
-                    type: 'password'
-                }
-            },
-            async authorize(credentials, req) {
-                const user = {
-                    id: '1',
-                    name: 'John',
-                    email: credentials?.email as string
-                };
-                if (user) {
-                    // Any object returned will be saved in `user` property of the JWT
-                    return user;
-                } else {
-                    // If you return null then an error will be displayed advising the user to check their details.
-                    return null;
+const signUp = async (formData: FormData) => {
+    'use server';
 
-                    // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
-                }
+    const origin = headers().get('origin');
+    const email = formData.get('email') as string;
+    const firstname = formData.get('firstname') as string;
+    const lastname = formData.get('lastname') as string;
+    const password = formData.get('password') as string;
+    const supabase = createClient();
+
+    // Step 1: Sign up the user
+    const {
+        data: { user },
+        error
+    } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            emailRedirectTo: `${origin}/auth/callback`,
+            data: {
+                firstname: firstname,
+                lastname: lastname
             }
-        })
-    ],
-    adapter: SupabaseAdapter({
-        url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        secret: process.env.SUPABASE_SERVICE_ROLE_KEY!
-    }) as Adapter,
-    callbacks: {
-        async session({ session, user }) {
-            const signingSecret = process.env.SUPABASE_JWT_SECRET;
-            if (signingSecret) {
-                const payload = {
-                    aud: 'authenticated',
-                    exp: Math.floor(new Date(session.expires).getTime() / 1000),
-                    sub: user.id,
-                    email: user.email,
-                    role: 'authenticated'
-                };
-                session.supabaseAccessToken = jwt.sign(payload, signingSecret);
-            }
-            return session;
         }
-    },
-    pages: {
-        signIn: '/accounts/login' //sign-in page
+    });
+
+    if (error) {
+        return redirect('/accounts/register?message=Could not register user');
     }
-});
+
+    // Step 2: If signup successful, insert additional data into a 'profiles' table
+    if (user) {
+        const { error: profileError } = await supabase.from('users').insert({
+            id: user.id, // use the user's ID as the profile ID
+            name: `${firstname} ${lastname}`,
+            email: user.email
+        });
+
+        if (profileError) {
+            return redirect('/accounts/register?message=Could not create user');
+        }
+    }
+
+    return redirect('/accounts/register?message=Check email to continue sign in process');
+};

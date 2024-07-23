@@ -99,23 +99,23 @@ const Article = ({ children, className, id, dangerouslySetInnerHTML }: ArticlePr
             dangerouslySetInnerHTML={dangerouslySetInnerHTML}
             className={cn(
                 // General Prose
-                'prose prose-neutral prose:font-sans dark:prose-invert xl:prose-lg',
+                // 'prose prose-neutral prose:font-sans dark:prose-invert xl:prose-lg',
                 // Prose Headings
-                'prose-headings:font-normal',
+                // 'prose-headings:font-normal',
                 // Prose Paragraphs
-                'prose-p:mb-2',
+                // 'prose-p:mb-2',
                 // Prose Strong
-                'prose-strong:font-semibold',
+                // 'prose-strong:font-semibold',
                 // Inline Links
-                'prose-a:underline prose-a:decoration-primary/50 prose-a:underline-offset-2 prose-a:text-foreground/75 prose-a:transition-all',
+                // 'prose-a:underline prose-a:decoration-primary/50 prose-a:underline-offset-2 prose-a:text-foreground/75 prose-a:transition-all',
                 // Inline Link Hover
-                'hover:prose-a:decoration-primary hover:prose-a:text-foreground',
+                // 'hover:prose-a:decoration-primary hover:prose-a:text-foreground',
                 // Blockquotes
-                'prose-blockquote:not-italic',
+                // 'prose-blockquote:not-italic',
                 // Pre and Code Blocks
-                'prose-pre:border prose-pre:bg-muted/25',
+                // 'prose-pre:border prose-pre:bg-muted/25',
                 // Images
-                'prose-img:rounded-lg prose-img:border prose-img:overflow-hidden',
+                // 'prose-img:rounded-lg prose-img:border prose-img:overflow-hidden',
                 className
             )}
             id={id}

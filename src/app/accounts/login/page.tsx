@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -18,8 +18,9 @@ import { z } from 'zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
 import GoogleSignInButton from '@/components/accounts/github-auth-button';
+import { createClient } from '@/utils/supabase/client';
+import { useToast } from '@/components/ui/use-toast';
 
 const formSchema = z.object({
     email: z.string().email({ message: 'Enter a valid email address' }),
@@ -33,19 +34,35 @@ export default function Login() {
     const callbackUrl = searchParams.get('callbackUrl');
     const [loading, setLoading] = useState(false);
     const defaultValues = {
-        email: 'kelvince05@gmail.com'
+        email: ''
     };
     const form = useForm<UserFormValue>({
         resolver: zodResolver(formSchema),
         defaultValues
     });
+    const supabase = createClient();
+    const router = useRouter();
+    const { toast } = useToast();
 
     const onSubmit = async (data: UserFormValue) => {
-        await signIn('credentials', {
+        const { data: user, error } = await supabase.auth.signInWithPassword({
             email: data.email,
-            password: data.password,
-            callbackUrl: callbackUrl ?? '/admin'
+            password: data.password
         });
+
+        if (error) {
+            toast({
+                variant: 'destructive',
+                title: 'Login Failed',
+                description: 'Could not authenticate user'
+            });
+        }
+
+        if (user.user?.role == 'authenticated') {
+            return router.push('/admin');
+        }
+
+        return router.push('/');
     };
 
     return (

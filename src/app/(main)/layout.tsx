@@ -75,7 +75,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <main className="">
+        <main className="mx-auto">
             <Nav />
             <Main>{children}</Main>
             <Footer />

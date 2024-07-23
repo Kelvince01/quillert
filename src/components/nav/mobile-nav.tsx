@@ -34,7 +34,7 @@ export function MobileNav() {
             <SheetContent side="left" className="pr-0">
                 <MobileLink href="/" className="flex items-center" onOpenChange={setOpen}>
                     <ArrowRightSquare className="mr-2 h-4 w-4" />
-                    <span className="text-muted-foreground">My Site</span>
+                    <span className="text-muted-foreground">Quillert</span>
                 </MobileLink>
                 <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
                     <div className="flex flex-col space-y-3">

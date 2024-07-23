@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
@@ -6,8 +8,36 @@ import { mainMenu } from '@/config/menu.config';
 import Logo from '../../../public/app-logo.png';
 import { MobileNav } from '../nav/mobile-nav';
 import { NavProps } from '@/lib/types';
+import { useCallback, useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Session } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
+// import { PostSearch } from '../posts/post-search';
 
 const Nav = ({ className, children, id }: NavProps) => {
+    const [supabase] = useState(() => createClient());
+    const [session, setSession] = useState<Session | null>(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        async function getSession() {
+            const { data: session } = await supabase.auth.getSession();
+            setSession(session.session!);
+        }
+
+        getSession();
+    });
+
+    const signOut = useCallback(async () => {
+        try {
+            await supabase.auth.signOut();
+            setSession(null);
+            router.push('/accounts/login');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    }, [supabase, router]);
+
     return (
         <nav
             className={cn('sticky z-50 top-0 bg-background', 'border-b', 'fade-in', className)}
@@ -38,9 +68,17 @@ const Nav = ({ className, children, id }: NavProps) => {
                             </Button>
                         ))}
                     </div>
-                    <Button asChild className="hidden sm:flex">
-                        <Link href="">Login</Link>
-                    </Button>
+                    {/*<PostSearch />*/}
+                    {session ? (
+                        <Button asChild className="hidden sm:flex" onClick={signOut}>
+                            Logout
+                        </Button>
+                    ) : (
+                        <Button asChild className="hidden sm:flex">
+                            <Link href="/accounts/login">Login</Link>
+                        </Button>
+                    )}
+
                     <MobileNav />
                 </div>
             </div>

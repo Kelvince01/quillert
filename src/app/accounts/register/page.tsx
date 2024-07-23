@@ -1,36 +1,114 @@
+'use client';
+
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { headers } from 'next/headers';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
-import { SubmitButton } from '@/components/accounts/submit-button';
+import { createClient } from '@/utils/supabase/client';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { z } from 'zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useToast } from '@/components/ui/use-toast';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from '@/components/ui/form';
 
-export default function RegisterPage({ searchParams }: { searchParams: { message: string } }) {
-    const signUp = async (formData: FormData) => {
-        'use server';
+const formSchema = z.object({
+    email: z.string().email({ message: 'Enter a valid email address' }),
+    password: z.string(),
+    firstname: z.string(),
+    lastname: z.string()
+});
 
-        const origin = headers().get('origin');
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
-        const supabase = createClient();
+type UserFormValue = z.infer<typeof formSchema>;
 
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
+export default function RegisterPage() {
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl');
+    const [loading, setLoading] = useState(false);
+    const defaultValues = {
+        email: ''
+    };
+    const form = useForm<UserFormValue>({
+        resolver: zodResolver(formSchema),
+        defaultValues
+    });
+    const supabase = createClient();
+    const router = useRouter();
+    const { toast } = useToast();
+
+    const onSubmit = async (data: UserFormValue) => {
+        const {
+            data: { user },
+            error
+        } = await supabase.auth.signUp({
+            email: data.email,
+            password: data.password,
             options: {
-                emailRedirectTo: `${origin}/auth/callback`
+                emailRedirectTo: `${window.location.origin}/auth/callback`,
+                data: {
+                    firstname: data.firstname,
+                    lastname: data.lastname
+                }
             }
         });
 
         if (error) {
-            return redirect('/accounts/login?message=Could not authenticate user');
+            toast({
+                variant: 'destructive',
+                title: 'Register Failed',
+                description: 'Could not register user'
+            });
         }
 
-        return redirect('/accounts/login?message=Check email to continue sign in process');
+        // Step 2: If signup successful, insert additional data into a 'profiles' table
+        if (user) {
+            const { error: profileError } = await supabase.from('users').insert({
+                id: user.id, // use the user's ID as the profile ID
+                name: `${data.firstname} ${data.lastname}`,
+                email: user.email
+            });
+
+            if (profileError) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Register Failed',
+                    description: 'Could not create user'
+                });
+            }
+        }
+
+        toast({
+            title: 'Register Successful',
+            description: 'Check email to continue sign in process'
+        });
+    };
+
+    const handleGitHubSignUp = async () => {
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'github',
+                options: {
+                    redirectTo: `${window.location.origin}/auth/callback`
+                }
+            });
+
+            if (error) throw error;
+
+            // The user will be redirected to GitHub for authentication
+        } catch (error) {
+            console.error('Error signing up with GitHub:', error);
+            alert(error instanceof Error ? error.message : 'An error occurred');
+        }
     };
 
     return (
@@ -40,42 +118,105 @@ export default function RegisterPage({ searchParams }: { searchParams: { message
                 <CardDescription>Enter your information to create an account</CardDescription>
             </CardHeader>
             <CardContent>
-                <form className="grid gap-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="first-name">First name</Label>
-                            <Input id="first-name" placeholder="Max" required />
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <FormField
+                                    control={form.control}
+                                    name="firstname"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>First name</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="John"
+                                                    disabled={loading}
+                                                    required
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <FormField
+                                    control={form.control}
+                                    name="lastname"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Last name</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Doe"
+                                                    disabled={loading}
+                                                    required
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="last-name">Last name</Label>
-                            <Input id="last-name" placeholder="Robinson" required />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="m@example.com"
+                                                disabled={loading}
+                                                required
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="m@example.com" required />
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input id="password" type="password" />
-                    </div>
+                        <div className="grid gap-2">
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="password"
+                                                placeholder="••••••••"
+                                                disabled={loading}
+                                                required
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
 
-                    <SubmitButton
-                        formAction={signUp}
-                        className="border border-foreground/20 rounded-md px-4 py-2 mb-2 mt-4"
-                        pendingText="Signing Up..."
-                    >
-                        Create an account
-                    </SubmitButton>
-                    {searchParams?.message && (
-                        <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-                            {searchParams.message}
-                        </p>
-                    )}
-                    <Button variant="outline" className="w-full">
-                        Sign up with GitHub
-                    </Button>
-                </form>
+                        <Button type="submit" aria-disabled={loading} className="w-full">
+                            {loading ? 'Signing Up...' : 'Create an account'}
+                        </Button>
+                    </form>
+                </Form>
+
+                <Button variant="outline" className="w-full mt-4" onClick={handleGitHubSignUp}>
+                    Sign up with GitHub
+                </Button>
+
                 <div className="mt-4 text-center text-sm">
                     Already have an account?{' '}
                     <Link href="/accounts/login" className="underline">

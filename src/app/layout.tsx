@@ -32,10 +32,12 @@ export const metadata: Metadata = {
         'Quillert',
         'Postgres'
     ],
-    authors: [{ name: 'Kelvince Phillips', url: 'https://quillert.vercel.app/' }],
+    authors: [{ name: 'Kelvince Phillips', url: 'https://quillert.com/' }],
     creator: 'Kelvince Phillips',
     publisher: 'Kelvince Phillips',
-    robots: { index: true, follow: true },
+    manifest: '/manifest.json',
+    // themeColor: '#ffffff',
+    // viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
     icons: [
         { rel: 'apple-touch-icon', url: '/apple-touch-icon.png' },
         {
@@ -43,7 +45,6 @@ export const metadata: Metadata = {
             url: '/favicon.ico'
         }
     ],
-    // manifest: `${defaultUrl}/site.webmanifest`,
     openGraph: {
         url: defaultUrl,
         title: TITLE,

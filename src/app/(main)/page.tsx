@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import PostCard from '@/components/posts/post-card';
 import { getFeaturedPosts, getLatestPosts } from '@/lib/blog';
 import { Post } from '@/lib/blog.d';
+import { FeaturedPost } from '@/components/posts/featured-post';
 
 // This page is using the craft.tsx component and design system
 export default async function Home() {
@@ -42,9 +43,9 @@ export default async function Home() {
                 </div>
                 <div className="mx-auto max-w-3xl space-y-6 text-center">
                     <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                        Featured Posts
+                        Featured Post
                     </h2>
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-6">
                         {/*<Card>
                             <CardContent>
                                 <Image
@@ -77,8 +78,9 @@ export default async function Home() {
                                 </Button>
                             </CardFooter>
                         </Card>*/}
-                        {featuredPosts.map((post: Post) => (
-                            <PostCard key={post.id} post={post} />
+                        {featuredPosts.slice(0, 1).map((post: Post) => (
+                            // <PostCard key={post.id} post={post} />
+                            <FeaturedPost key={post.id} post={post} />
                         ))}
                     </div>
                 </div>
@@ -86,7 +88,7 @@ export default async function Home() {
                     <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
                         Recent Posts
                     </h2>
-                    <div className="grid gap-6">
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {/*<Card>
                             <CardContent className="grid grid-cols-[100px_1fr] gap-4">
                                 <Image

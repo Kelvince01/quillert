@@ -1,3 +1,5 @@
+import withPWA from 'next-pwa';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental: {
@@ -13,12 +15,6 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'wp.9d8.dev',
-                port: '',
-                pathname: '/**'
-            },
-            {
-                protocol: 'https',
                 hostname: 'hzmdqhzfvhihhvjxzxzu.supabase.co',
                 port: '',
                 pathname: '/**'
@@ -27,4 +23,12 @@ const nextConfig = {
     }
 };
 
-export default nextConfig;
+const config = withPWA({
+    dest: 'public',
+    disable: process.env.NODE_ENV === 'development',
+    register: true,
+    skipWaiting: true,
+    sw: '/worker/index.ts' // Path to your custom service worker
+})(nextConfig);
+
+export default config;

@@ -15,10 +15,23 @@ const badgeVariants = cva(
                 destructive:
                     'border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80',
                 outline: 'text-foreground'
+            },
+            radius: {
+                default: 'rounded-md',
+                rounded: 'rounded-lg',
+                pill: 'rounded-full'
+            },
+            size: {
+                sm: 'px-2 py-0.5',
+                default: 'px-2.5 py-0.5',
+                md: 'px-3 py-1',
+                lg: 'px-4 py-2'
             }
         },
         defaultVariants: {
-            variant: 'default'
+            variant: 'default',
+            radius: 'default',
+            size: 'default'
         }
     }
 );

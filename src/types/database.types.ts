@@ -329,6 +329,66 @@ export type Database = {
                     }
                 ];
             };
+            post_categories: {
+                Row: {
+                    category_id: number;
+                    post_id: number;
+                };
+                Insert: {
+                    category_id: number;
+                    post_id: number;
+                };
+                Update: {
+                    category_id?: number;
+                    post_id?: number;
+                };
+                Relationships: [
+                    {
+                        foreignKeyName: 'post_categories_category_id_fkey';
+                        columns: ['category_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'categories';
+                        referencedColumns: ['id'];
+                    },
+                    {
+                        foreignKeyName: 'post_categories_post_id_fkey';
+                        columns: ['post_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'posts';
+                        referencedColumns: ['id'];
+                    }
+                ];
+            };
+            post_tags: {
+                Row: {
+                    post_id: number;
+                    tag_id: number;
+                };
+                Insert: {
+                    post_id: number;
+                    tag_id: number;
+                };
+                Update: {
+                    post_id?: number;
+                    tag_id?: number;
+                };
+                Relationships: [
+                    {
+                        foreignKeyName: 'post_tags_post_id_fkey';
+                        columns: ['post_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'posts';
+                        referencedColumns: ['id'];
+                    },
+                    {
+                        foreignKeyName: 'post_tags_tag_id_fkey';
+                        columns: ['tag_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'tags';
+                        referencedColumns: ['id'];
+                    }
+                ];
+            };
             posts: {
                 Row: {
                     author: number;
@@ -460,6 +520,42 @@ export type Database = {
                     taxonomy?: string;
                 };
                 Relationships: [];
+            };
+            users: {
+                Row: {
+                    email: string | null;
+                    id: string;
+                    image: string | null;
+                    name: string | null;
+                };
+                Insert: {
+                    email?: string | null;
+                    id: string;
+                    image?: string | null;
+                    name?: string | null;
+                };
+                Update: {
+                    email?: string | null;
+                    id?: string;
+                    image?: string | null;
+                    name?: string | null;
+                };
+                Relationships: [
+                    {
+                        foreignKeyName: 'users_id_fkey';
+                        columns: ['id'];
+                        isOneToOne: true;
+                        referencedRelation: 'users';
+                        referencedColumns: ['id'];
+                    },
+                    {
+                        foreignKeyName: 'users_id_fkey1';
+                        columns: ['id'];
+                        isOneToOne: true;
+                        referencedRelation: 'users';
+                        referencedColumns: ['id'];
+                    }
+                ];
             };
         };
         Views: {
