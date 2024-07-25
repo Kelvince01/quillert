@@ -6,12 +6,26 @@ import { CopyIcon, LinkedinIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FaXTwitter } from 'react-icons/fa6';
 import { GoShare } from 'react-icons/go';
-import { LinkedinShareButton, TwitterShareButton } from 'react-share';
+import {
+    LinkedinShareButton,
+    TwitterShareButton,
+    WhatsappIcon,
+    WhatsappShareButton
+} from 'react-share';
 import { toast } from 'sonner';
-import { Post } from '@/lib/blog.d';
+import { Post, Tag } from '@/lib/blog.d';
 
-export default function PostShare({ slug, title }: Post) {
+export default function PostShare({
+    slug,
+    title,
+    tags
+}: {
+    slug: string;
+    title: string;
+    tags: Tag[];
+}) {
     const [host, setHost] = useState<string | undefined>(undefined);
+    // const shareUrl = 'https://quillert.com' + usePathname();
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -19,7 +33,7 @@ export default function PostShare({ slug, title }: Post) {
         }
     }, []);
 
-    const url = host ? `${host}/blogs/${slug}` : '';
+    const url = host ? `${host}/posts/${slug}` : '';
 
     const handleCopy = () => {
         const copyPromise = () =>
@@ -63,6 +77,7 @@ export default function PostShare({ slug, title }: Post) {
                     title={title}
                     className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-500 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-400"
                     resetButtonStyle={false}
+                    hashtags={[`${tags[0].slug}`]}
                 >
                     <FaXTwitter className="flex-shrink-0 size-4" />
                     Share on X
@@ -76,6 +91,16 @@ export default function PostShare({ slug, title }: Post) {
                     <LinkedinIcon className="flex-shrink-0 size-4" />
                     Share on LinkedIn
                 </LinkedinShareButton>
+                <WhatsappShareButton
+                    url={url}
+                    title={title}
+                    className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-500 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-400"
+                    resetButtonStyle={false}
+                    separator=":: "
+                >
+                    <WhatsappIcon className="flex-shrink-0 size-4" />
+                    Share on Whatsapp
+                </WhatsappShareButton>
             </PopoverContent>
         </Popover>
     );
@@ -90,7 +115,7 @@ export const XShare = ({ title, slug }: Post) => {
         }
     }, []);
 
-    const url = host ? `${host}/blogs/${slug}` : '';
+    const url = host ? `${host}/posts/${slug}` : '';
 
     if (!host) {
         return null; // or a loading spinner

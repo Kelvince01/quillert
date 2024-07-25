@@ -70,7 +70,7 @@ const Nav = ({ className, children, id }: NavProps) => {
                     </div>
                     {/*<PostSearch />*/}
                     {session ? (
-                        <Button asChild className="hidden sm:flex" onClick={signOut}>
+                        <Button className="hidden sm:flex" onClick={signOut}>
                             Logout
                         </Button>
                     ) : (

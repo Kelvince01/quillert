@@ -18,7 +18,8 @@ export type Post = {
     ping_status: 'open' | 'closed';
     sticky: boolean;
     template: string;
-    analytics?: any;
+    claps: number;
+    views: number;
     format:
         | 'standard'
         | 'aside'

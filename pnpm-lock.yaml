@@ -128,9 +128,6 @@ importers:
       react-share:
         specifier: ^5.1.0
         version: 5.1.0(react@18.3.1)
-      react-share-kit:
-        specifier: ^1.1.0
-        version: 1.1.0(react@18.3.1)
       react-wrap-balancer:
         specifier: ^1.1.1
         version: 1.1.1(react@18.3.1)
@@ -3513,11 +3510,6 @@ packages:
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.1 || ^18.0.0
-
-  react-share-kit@1.1.0:
-    resolution: {integrity: sha512-aOOQr1wy7Qw74CDdajLj2Hv1+dzvuO4DGJwLX3YtvKEFrIK0cnt6bkzFzjDpvs2qQ9PMOPkMTqog2Apx947a6A==}
-    peerDependencies:
-      react: ^18.2.0
 
   react-share@5.1.0:
     resolution: {integrity: sha512-OvyfMtj/0UzH1wi90OdHhZVJ6WUC/+IeWvBwppeZozwIGyAjQgyR0QXlHOrxVHVECqnGvcpBaFTXVrqouTieaw==}
@@ -7818,13 +7810,6 @@ snapshots:
   react-scrollbar-size@5.0.0(react@18.3.1):
     dependencies:
       react: 18.3.1
-
-  react-share-kit@1.1.0(react@18.3.1):
-    dependencies:
-      jsonp: 0.2.1
-      react: 18.3.1
-    transitivePeerDependencies:
-      - supports-color
 
   react-share@5.1.0(react@18.3.1):
     dependencies:

@@ -4,17 +4,25 @@ import { Fragment, useCallback, useEffect, useState } from 'react';
 import { PiHandsClapping } from 'react-icons/pi';
 import { useDebounceValue } from 'usehooks-ts';
 import { Post } from '@/lib/blog.d';
+import { createClient } from '@/utils/supabase/client';
 
-export default function Claps({ id, analytics }: Post) {
-    const [claps, setClaps] = useState(analytics?.claps || 0);
+export default function Claps({ id, claps: postClaps }: Post) {
+    const [claps, setClaps] = useState(postClaps || 0);
     const [cacheCount, setCacheCount] = useState(0);
     const [debouncedCacheCount] = useDebounceValue(cacheCount, 1000);
+    const supabase = createClient();
 
     useEffect(() => {
         if (debouncedCacheCount > 0) {
             const saveClaps = async () => {
                 try {
-                    // await postivaClient.contents.clap(id, { count: debouncedCacheCount });
+                    const { data, error } = await supabase
+                        .from('posts')
+                        .update({ claps: debouncedCacheCount })
+                        .eq('id', id);
+
+                    if (error) throw error;
+
                     setCacheCount(0);
                 } catch (error) {
                     console.error('Failed to save claps:', error);

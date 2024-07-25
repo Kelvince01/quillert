@@ -14,18 +14,23 @@ export async function getAllPosts(filterParams?: {
     tag?: string;
     category?: string;
 }): Promise<Post[]> {
-    let query: any = await supabase.from('posts').select('*');
+    let query: any = await supabase.from('posts').select('*').eq('status', 'publish');
 
     // Build query based on filter parameters
     if (filterParams) {
         if (filterParams.author) {
-            query = await supabase.from('posts').select('*').eq('author', filterParams.author);
+            query = await supabase
+                .from('posts')
+                .select('*')
+                .eq('status', 'publish')
+                .eq('author', filterParams.author);
         }
 
         if (filterParams.tag) {
             query = await supabase
                 .from('posts')
                 .select('*')
+                .eq('status', 'publish')
                 .filter('tags', 'cs', `${filterParams.tag}`);
         }
 
@@ -33,6 +38,7 @@ export async function getAllPosts(filterParams?: {
             query = await supabase
                 .from('posts')
                 .select('*')
+                .eq('status', 'publish')
                 .filter('categories', 'cs', `${filterParams.category}`);
         }
 
@@ -40,6 +46,7 @@ export async function getAllPosts(filterParams?: {
             query = await supabase
                 .from('posts')
                 .select('*')
+                .eq('status', 'publish')
                 .eq('author', filterParams.author)
                 .filter('tags', 'cs', `${filterParams.tag}`);
         }
@@ -47,6 +54,7 @@ export async function getAllPosts(filterParams?: {
             query = await supabase
                 .from('posts')
                 .select('*')
+                .eq('status', 'publish')
                 .eq('author', filterParams.author)
                 .contains('categories', { id: Number(filterParams.category) });
         }
@@ -54,6 +62,7 @@ export async function getAllPosts(filterParams?: {
             query = await supabase
                 .from('posts')
                 .select('*')
+                .eq('status', 'publish')
                 .filter('tags', 'cs', `${filterParams.tag}`)
                 .filter('categories', 'cs', `${filterParams.category}`);
         }
@@ -61,6 +70,7 @@ export async function getAllPosts(filterParams?: {
             query = await supabase
                 .from('posts')
                 .select('*')
+                .eq('status', 'publish')
                 .eq('author', filterParams.author)
                 .filter('tags', 'cs', `${filterParams.tag}`)
                 .filter('categories', 'cs', `${filterParams.category}`);
@@ -77,7 +87,12 @@ export async function getAllPosts(filterParams?: {
 }
 
 export async function getPostById(id: number): Promise<Post> {
-    const { data, error } = await supabase.from('posts').select('*').eq('id', id).single();
+    const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('status', 'publish')
+        .eq('id', id)
+        .single();
 
     if (error) {
         throw error;
@@ -87,7 +102,12 @@ export async function getPostById(id: number): Promise<Post> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post> {
-    const { data, error } = await supabase.from('posts').select('*').eq('slug', slug).single();
+    const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('status', 'publish')
+        .eq('slug', slug)
+        .single();
 
     if (error) {
         throw error;
@@ -100,6 +120,7 @@ export async function getFeaturedPosts(): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts')
         .select('*')
+        .eq('status', 'publish')
         .order('created_at', { ascending: false })
         .eq('sticky', true)
         .range(0, 2);
@@ -115,6 +136,7 @@ export async function getLatestPosts(): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts')
         .select('*')
+        .eq('status', 'publish')
         .order('created_at', { ascending: false })
         .range(0, 5);
 
@@ -160,6 +182,7 @@ export async function getPostsByCategory(categoryId: number): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts')
         .select('*')
+        .eq('status', 'publish')
         .filter('categories', 'cs', `${categoryId}`);
 
     if (error) {
@@ -174,6 +197,7 @@ export async function getPostsByTag(tagId: number): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts')
         .select('*')
+        .eq('status', 'publish')
         .filter('tags', 'cs', `${tagId}`);
 
     if (error) {
@@ -302,7 +326,11 @@ export async function getAuthorBySlug(slug: string): Promise<Author> {
 }
 
 export async function getPostsByAuthor(authorId: number): Promise<Post[]> {
-    const { data, error } = await supabase.from('posts').select('*').eq('author_id', authorId);
+    const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('status', 'publish')
+        .eq('author_id', authorId);
 
     if (error) {
         throw error;
@@ -314,7 +342,11 @@ export async function getPostsByAuthor(authorId: number): Promise<Post[]> {
 export async function getPostsByAuthorSlug(authorSlug: string): Promise<Post[]> {
     const author = await getAuthorBySlug(authorSlug);
     // Assuming a 'post_author' table with foreign keys
-    const { data, error } = await supabase.from('posts').select('*').eq('author', author.id);
+    const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('status', 'publish')
+        .eq('author', author.id);
 
     if (error) {
         throw error;
@@ -329,6 +361,7 @@ export async function getPostsByCategorySlug(categorySlug: string): Promise<Post
     const { data, error } = await supabase
         .from('posts')
         .select('*')
+        .eq('status', 'publish')
         .filter('categories', 'cs', `${category.id}`);
 
     if (error) {
@@ -346,6 +379,7 @@ export async function getPostsByTagSlug(tagSlug: string): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts')
         .select('*')
+        .eq('status', 'publish')
         .filter('tags', 'cs', `${tag.id}`);
 
     if (error) {

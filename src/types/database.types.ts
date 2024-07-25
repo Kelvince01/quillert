@@ -103,6 +103,58 @@ export type Database = {
                     }
                 ];
             };
+            comments: {
+                Row: {
+                    content: string;
+                    created_at: string | null;
+                    id: string;
+                    parent_id: string | null;
+                    post_id: number | null;
+                    updated_at: string | null;
+                    user_id: string | null;
+                };
+                Insert: {
+                    content: string;
+                    created_at?: string | null;
+                    id?: string;
+                    parent_id?: string | null;
+                    post_id?: number | null;
+                    updated_at?: string | null;
+                    user_id?: string | null;
+                };
+                Update: {
+                    content?: string;
+                    created_at?: string | null;
+                    id?: string;
+                    parent_id?: string | null;
+                    post_id?: number | null;
+                    updated_at?: string | null;
+                    user_id?: string | null;
+                };
+                Relationships: [
+                    {
+                        foreignKeyName: 'comments_parent_id_fkey';
+                        columns: ['parent_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'comments';
+                        referencedColumns: ['id'];
+                    },
+                    {
+                        foreignKeyName: 'comments_post_id_fkey';
+                        columns: ['post_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'posts';
+                        referencedColumns: ['id'];
+                    },
+                    {
+                        foreignKeyName: 'comments_user_id_fkey';
+                        columns: ['user_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'users';
+                        referencedColumns: ['id'];
+                    }
+                ];
+            };
             media: {
                 Row: {
                     alt_text: string | null;
@@ -393,6 +445,7 @@ export type Database = {
                 Row: {
                     author: number;
                     categories: Json | null;
+                    claps: number | null;
                     comment_status: string;
                     content: string;
                     created_at: string | null;
@@ -416,10 +469,12 @@ export type Database = {
                     title: string;
                     type: string;
                     updated_at: string | null;
+                    views: number | null;
                 };
                 Insert: {
                     author: number;
                     categories?: Json | null;
+                    claps?: number | null;
                     comment_status: string;
                     content: string;
                     created_at?: string | null;
@@ -443,10 +498,12 @@ export type Database = {
                     title: string;
                     type: string;
                     updated_at?: string | null;
+                    views?: number | null;
                 };
                 Update: {
                     author?: number;
                     categories?: Json | null;
+                    claps?: number | null;
                     comment_status?: string;
                     content?: string;
                     created_at?: string | null;
@@ -470,6 +527,7 @@ export type Database = {
                     title?: string;
                     type?: string;
                     updated_at?: string | null;
+                    views?: number | null;
                 };
                 Relationships: [
                     {
@@ -562,7 +620,12 @@ export type Database = {
             [_ in never]: never;
         };
         Functions: {
-            [_ in never]: never;
+            increment_views: {
+                Args: {
+                    post_id: number;
+                };
+                Returns: number;
+            };
         };
         Enums: {
             [_ in never]: never;

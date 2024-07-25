@@ -1,184 +1,107 @@
-'use client';
-
-import React, { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createClient } from '@/utils/supabase/client';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '../ui/textarea';
-
-interface CommentFormData {
-    id: string;
-    name: string;
-    email: string;
-    comment: string;
-}
-
-interface CommentFormProps {
-    id: string;
-}
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
+import { createClient } from '@/utils/supabase/client';
+import { useUser } from '@/hooks/use-user';
 
 const formSchema = z.object({
-    email: z.string().email({ message: 'Enter a valid email address' }),
-    name: z.string().min(1, { message: 'Name is required' }),
-    comment: z.string().min(1, { message: 'Comment is required' })
+    content: z.string().min(1, {
+        message: 'Comment cannot be empty.'
+    })
 });
 
-type UserFormValue = z.infer<typeof formSchema>;
+type CommentFormValues = z.infer<typeof formSchema>;
 
-export function CommentForm({ id }: CommentFormProps): React.JSX.Element {
-    const [formData, setFormData] = useState<UserFormValue | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+interface CommentFormProps {
+    postId: string;
+    parentId?: string;
+    onSuccess?: () => void;
+}
 
-    const [loading, setLoading] = useState(false);
-    const defaultValues = {
-        email: ''
-    };
-    const form = useForm<UserFormValue>({
-        resolver: zodResolver(formSchema),
-        defaultValues
-    });
+export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
     const supabase = createClient();
+    const { user } = useUser();
     const { toast } = useToast();
 
-    const onSubmit = async (data: UserFormValue) => {
-        setIsSubmitting(true);
-        setFormData(data);
-        try {
-            const response = await fetch('/api/createComment', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (!response.ok) {
-                throw new Error('Failed to submit comment');
-            }
-            setIsSubmitting(false);
-            setHasSubmitted(true);
-        } catch (err) {
-            setFormData(null);
-            console.error(err);
+    const form = useForm<CommentFormValues>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            content: ''
         }
-    };
+    });
 
-    if (isSubmitting) {
-        return <h3>Submitting comment…</h3>;
-    }
+    async function onSubmit(values: CommentFormValues) {
+        if (!user) {
+            toast({
+                title: 'Authentication required',
+                description: 'You must be logged in to post a comment.',
+                variant: 'destructive'
+            });
+            return;
+        }
 
-    if (hasSubmitted) {
-        return (
-            <>
-                <h3>Thanks for your comment!</h3>
-                <ul>
-                    <li>
-                        Name: {formData?.name} <br />
-                        Email: {formData?.email} <br />
-                        Comment: {formData?.comment}
-                    </li>
-                </ul>
-            </>
-        );
+        try {
+            const { data, error } = await supabase.from('comments').insert([
+                {
+                    user_id: user.id,
+                    post_id: postId,
+                    parent_id: parentId || null,
+                    content: values.content
+                }
+            ]);
+
+            if (error) throw error;
+
+            toast({
+                title: 'Comment submitted',
+                description: 'Your comment has been successfully posted.'
+            });
+
+            form.reset();
+            if (onSuccess) onSuccess();
+        } catch (error) {
+            console.error('Error submitting comment:', error);
+            toast({
+                title: 'Error',
+                description: 'There was an error posting your comment. Please try again.',
+                variant: 'destructive'
+            });
+        }
     }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-lg">
-                {/*<input {...register('id')} type="hidden" value={id} />*/}
-                {/*<label className="block mb-5">*/}
-                {/*    <span className="text-gray-700">Name</span>*/}
-                {/*    <input*/}
-                {/*        {...register('name', { required: true })}*/}
-                {/*        className="form-input mt-1 block w-full"*/}
-                {/*        placeholder="John Appleseed"*/}
-                {/*    />*/}
-                {/*</label>*/}
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
-                    name="name"
+                    name="content"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="text"
-                                    placeholder="John Doe"
-                                    disabled={loading}
-                                    required
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                {/*<label className="block mb-5">*/}
-                {/*    <span className="text-gray-700">Email</span>*/}
-                {/*    <input*/}
-                {/*        {...register('email', { required: true })}*/}
-                {/*        type="email"*/}
-                {/*        className="form-input mt-1 block w-full"*/}
-                {/*        placeholder="your@email.com"*/}
-                {/*    />*/}
-                {/*</label>*/}
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="email"
-                                    placeholder="m@example.com"
-                                    disabled={loading}
-                                    required
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                {/*<label className="block mb-5">*/}
-                {/*    <span className="text-gray-700">Comment</span>*/}
-                {/*    <textarea*/}
-                {/*        {...register('comment', { required: true })}*/}
-                {/*        className="form-textarea mt-1 block w-full"*/}
-                {/*        rows={8}*/}
-                {/*        placeholder="Enter some long form content."*/}
-                {/*    ></textarea>*/}
-                {/*</label>*/}
-                <FormField
-                    control={form.control}
-                    name="comment"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Comment</FormLabel>
+                            <FormLabel>Your comment</FormLabel>
                             <FormControl>
                                 <Textarea
-                                    placeholder="Type in your comment"
-                                    disabled={loading}
-                                    required
+                                    placeholder="Write your comment here..."
+                                    className="resize-none"
                                     {...field}
-                                ></Textarea>
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-
-                <Button type="submit" aria-disabled={loading} className="w-full mt-4 mb-4">
-                    {loading ? 'Submitting comment...' : 'Comment'}
-                </Button>
+                <Button type="submit">Post Comment</Button>
             </form>
         </Form>
     );
