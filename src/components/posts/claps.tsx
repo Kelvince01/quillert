@@ -29,9 +29,11 @@ export default function Claps({ id, claps: postClaps }: Post) {
                 }
             };
 
-            saveClaps();
+            if (process.env.NODE_ENV != 'development') {
+                saveClaps();
+            }
         }
-    }, [debouncedCacheCount]);
+    }, [debouncedCacheCount, id, supabase]);
 
     const handleClap = useCallback(() => {
         setClaps((claps: number) => claps + 1);

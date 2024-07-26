@@ -1,3 +1,5 @@
+import '@/styles/kmenu-variables.css';
+import 'kmenu/dist/cmdk.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '../styles/globals.css';
@@ -7,6 +9,7 @@ import { ThemeProvider } from '@/components/theme/theme-provider';
 import { cn } from '@/lib/utils';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/next';
+import Toast from '@/components/common/cookie-consent';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -118,6 +121,7 @@ export default function RootLayout({
                     disableTransitionOnChange
                 >
                     {children}
+                    <Toast />
                 </ThemeProvider>
                 <Analytics />
             </body>

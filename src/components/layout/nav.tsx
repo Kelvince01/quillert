@@ -12,7 +12,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Session } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-// import { PostSearch } from '../posts/post-search';
+import { PostSearch } from '../posts/post-search';
 
 const Nav = ({ className, children, id }: NavProps) => {
     const [supabase] = useState(() => createClient());
@@ -68,13 +68,13 @@ const Nav = ({ className, children, id }: NavProps) => {
                             </Button>
                         ))}
                     </div>
-                    {/*<PostSearch />*/}
+                    <PostSearch />
                     {session ? (
-                        <Button className="hidden sm:flex" onClick={signOut}>
+                        <Button className="sm:flex" onClick={signOut}>
                             Logout
                         </Button>
                     ) : (
-                        <Button asChild className="hidden sm:flex">
+                        <Button asChild className="sm:flex">
                             <Link href="/accounts/login">Login</Link>
                         </Button>
                     )}

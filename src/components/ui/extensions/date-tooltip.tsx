@@ -25,13 +25,11 @@ const DateTooltip: React.FC<IDateTooltip> = ({
         const relative = moment(date).fromNow();
         const absolute = moment(date).format(dateFormat || 'DD/MM/YYYY');
 
-        const formattedDate = {
+        return {
             label: mode === IDateMode.absolute ? absolute : relative,
             tooltip: mode === IDateMode.relative ? absolute : relative
         };
-
-        return formattedDate;
-    }, [date, mode]);
+    }, [date, dateFormat, mode]);
 
     return (
         <Tooltip delayDuration={200}>

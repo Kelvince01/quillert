@@ -13,6 +13,7 @@ import { LuLink2 } from 'react-icons/lu';
 import { TbMoonStars } from 'react-icons/tb';
 import { useDebounceValue } from 'usehooks-ts';
 import { Post } from '@/lib/blog.d';
+import { createClient } from '@/utils/supabase/client';
 
 type Page = {
     icon: ReactElement;
@@ -39,7 +40,7 @@ export const Cmdk = () => {
         contents.map((content) => ({
             icon: <FileIcon />,
             text: content.title,
-            perform: () => router.push(`/${content.slug}`),
+            perform: () => router.push(`/posts/${content.slug}`),
             closeOnComplete: true
         }));
 
@@ -147,13 +148,19 @@ export const Cmdk = () => {
     const [postsCommands, setPostsCommands] = useCommands(posts);
     const [themeCommands] = useCommands(theme);
     const [linkCommands] = useCommands(links);
+    const supabase = createClient();
 
     const fetchData = async (query: string) => {
         setLoading(true);
-        // const response = await postivaClient.contents.getContents({
-        //     query
-        // });
-        // setContents(response?.data);
+        const { data, error } = await supabase
+            .from('posts')
+            .select('*')
+            .eq('status', 'publish')
+            .ilike('title', `%${query}%`);
+
+        if (error) throw error;
+
+        setContents(data);
         const newPosts: Command = {
             category: 'Posts',
             commands: generatePostsCommands()

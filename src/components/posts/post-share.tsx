@@ -2,11 +2,12 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { copyText } from '@/lib/utils';
-import { CopyIcon, LinkedinIcon } from 'lucide-react';
+import { CopyIcon, FacebookIcon, LinkedinIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FaXTwitter } from 'react-icons/fa6';
 import { GoShare } from 'react-icons/go';
 import {
+    FacebookShareButton,
     LinkedinShareButton,
     TwitterShareButton,
     WhatsappIcon,
@@ -101,6 +102,15 @@ export default function PostShare({
                     <WhatsappIcon className="flex-shrink-0 size-4" />
                     Share on Whatsapp
                 </WhatsappShareButton>
+                <FacebookShareButton
+                    url={url}
+                    title={title}
+                    className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-500 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-400"
+                    resetButtonStyle={false}
+                >
+                    <FacebookIcon className="flex-shrink-0 size-4" />
+                    Share on Facebook
+                </FacebookShareButton>
             </PopoverContent>
         </Popover>
     );

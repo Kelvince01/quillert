@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { badgeVariants } from '@/components/ui/badge';
 import { Article, Container } from '@/components/craft';
-import { Comments } from '@/components/comments/comment-thread';
+import { Comments } from '@/components/comments';
 import PostShare from '@/components/posts/post-share';
 import { LucideEye } from 'lucide-react';
 import Claps from '@/components/posts/claps';
@@ -39,13 +39,15 @@ export default function Post({
                     return;
                 }
 
-                await fetch('/api/increment-view', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ postId })
-                });
+                if (process.env.NODE_ENV != 'development') {
+                    await fetch('/api/increment-view', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ postId })
+                    });
+                }
             } catch (error) {
                 console.error('Failed to increment view:', error);
             }

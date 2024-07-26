@@ -11,10 +11,10 @@ import {
     FormLabel,
     FormMessage
 } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { createClient } from '@/utils/supabase/client';
 import { useUser } from '@/hooks/use-user';
+import Tiptap from '../ui/tiptap';
 
 const formSchema = z.object({
     content: z.string().min(1, {
@@ -91,11 +91,12 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
                         <FormItem>
                             <FormLabel>Your comment</FormLabel>
                             <FormControl>
-                                <Textarea
-                                    placeholder="Write your comment here..."
-                                    className="resize-none"
-                                    {...field}
-                                />
+                                {/*<Textarea*/}
+                                {/*    placeholder="Write your comment here..."*/}
+                                {/*    className="resize-none"*/}
+                                {/*    {...field}*/}
+                                {/*/>*/}
+                                <Tiptap initialValue={field.value} onChange={field.onChange} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

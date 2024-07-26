@@ -105,6 +105,7 @@ export type Database = {
             };
             comments: {
                 Row: {
+                    approved: boolean;
                     content: string;
                     created_at: string | null;
                     id: string;
@@ -114,6 +115,7 @@ export type Database = {
                     user_id: string | null;
                 };
                 Insert: {
+                    approved?: boolean;
                     content: string;
                     created_at?: string | null;
                     id?: string;
@@ -123,6 +125,7 @@ export type Database = {
                     user_id?: string | null;
                 };
                 Update: {
+                    approved?: boolean;
                     content?: string;
                     created_at?: string | null;
                     id?: string;
