@@ -1,8 +1,9 @@
 import '@/styles/kmenu-variables.css';
 import 'kmenu/dist/cmdk.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import '../styles/globals.css';
+import '../styles/prose-mirror.css';
 import React from 'react';
 import { DESCRIPTION, TITLE } from '@/config';
 import { ThemeProvider } from '@/components/theme/theme-provider';
@@ -18,29 +19,38 @@ const defaultUrl = process.env.VERCEL_URL
     : 'http://localhost:3000';
 const siteOgImage = `${defaultUrl}/api/og`;
 
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    minimumScale: 1,
+    themeColor: '#1f2937',
+    colorScheme: 'light'
+};
+
 export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     metadataBase: new URL(defaultUrl),
+    alternates: {
+        canonical: new URL(defaultUrl)
+    },
     referrer: 'origin-when-cross-origin',
     keywords: [
-        'Vercel',
-        'Supabase',
-        'Next.js',
+        'Technology',
+        'News',
+        'Trending',
         'Blog',
-        'Next.js',
-        'Shadcn/ui',
-        'Tailwind',
-        'Radix UI',
+        'Software Development',
+        'Interesting',
+        'Facts',
+        'General Knowledge',
         'Quillert',
-        'Postgres'
+        'Tutorials'
     ],
     authors: [{ name: 'Kelvince Phillips', url: 'https://quillert.com/' }],
     creator: 'Kelvince Phillips',
     publisher: 'Kelvince Phillips',
     manifest: '/manifest.json',
-    // themeColor: '#ffffff',
-    // viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
     icons: [
         { rel: 'apple-touch-icon', url: '/apple-touch-icon.png' },
         {
