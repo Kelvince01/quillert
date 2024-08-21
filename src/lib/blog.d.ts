@@ -37,26 +37,26 @@ export type Post = {
 };
 
 export type Category = {
-    id: number;
-    count: number;
-    description: string;
-    link: string;
+    id?: number;
+    count?: number;
+    description?: string;
+    link?: string;
     name: string;
     slug: string;
     taxonomy: 'category';
-    parent: number;
-    meta: any[];
+    parent?: number;
+    meta?: any[];
 };
 
 export type Tag = {
-    id: number;
-    count: number;
-    description: string;
-    link: string;
+    id?: number;
+    count?: number;
+    description?: string;
+    link?: string;
     name: string;
     slug: string;
     taxonomy: 'post_tag';
-    meta: any[];
+    meta?: any[];
 };
 
 export type Page = {
@@ -90,6 +90,7 @@ export type Author = {
     description: string;
     link: string;
     slug: string;
+    user_id: string;
     avatar_urls: {
         [key: string]: string;
     };
@@ -179,18 +180,18 @@ export type SearchResult = {
 };
 
 export type FeaturedMedia = {
-    id: number;
-    date: string;
+    id?: number;
+    date?: string;
     slug: string;
-    type: string;
+    type?: string;
     link: string;
     title: string;
     author: number;
     caption: string;
     alt_text: string;
-    media_type: string;
-    mime_type: string;
-    media_details: {
+    media_type?: string;
+    mime_type?: string;
+    media_details?: {
         width: number;
         height: number;
         file: string;
@@ -214,4 +215,14 @@ type FilterBarProps = {
     selectedAuthor?: string;
     selectedTag?: string;
     selectedCategory?: string;
+};
+
+export type Comment = {
+    id: string;
+    user_id: string;
+    parent_id?: string;
+    content: string;
+    approved: boolean;
+    created_at: string;
+    children?: Comment[];
 };

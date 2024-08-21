@@ -131,16 +131,28 @@ export const navItems: NavItem[] = [
         label: 'employee'
     },
     {
+        title: 'Comments',
+        href: '/admin/comments',
+        icon: 'employee',
+        label: 'employee'
+    },
+    {
+        title: 'Categories',
+        href: '/admin/categories',
+        icon: 'employee',
+        label: 'employee'
+    },
+    {
+        title: 'Tags',
+        href: '/admin/tags',
+        icon: 'employee',
+        label: 'employee'
+    },
+    {
         title: 'Profile',
         href: '/admin/profile',
         icon: 'profile',
         label: 'profile'
-    },
-    {
-        title: 'Kanban',
-        href: '/admin/kanban',
-        icon: 'kanban',
-        label: 'kanban'
     },
     {
         title: 'Login',

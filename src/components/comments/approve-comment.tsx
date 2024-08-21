@@ -3,12 +3,10 @@
 import { useUser } from '@/hooks/use-user';
 import { createClient } from '@/utils/supabase/client';
 import { useState } from 'react';
+import { Comment } from '@/lib/blog.d';
+import { CircleCheckBig } from 'lucide-react';
 
-export function CommentApproval({
-    comment
-}: {
-    comment: { id: number; content: string; approved: boolean };
-}) {
+export function CommentApproval({ comment }: { comment: Comment }) {
     const [isApproved, setIsApproved] = useState(comment.approved);
     const user = useUser();
     const supabase = createClient();
@@ -35,5 +33,13 @@ export function CommentApproval({
 
     if (!user) return null;
 
-    return <div>{!isApproved && <button onClick={handleApprove}>Approve Comment</button>}</div>;
+    return (
+        <div>
+            {!isApproved && (
+                <button onClick={handleApprove} className="flex flex-row">
+                    <CircleCheckBig className="mr-2 h-4 w-4" /> Approve
+                </button>
+            )}
+        </div>
+    );
 }

@@ -46,7 +46,7 @@ interface DataTableProps<TData, TValue> {
     };
 }
 
-export function PostTable<TData, TValue>({
+export function CommentTable<TData, TValue>({
     columns,
     data,
     pageNo,

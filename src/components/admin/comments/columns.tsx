@@ -5,17 +5,18 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { Post } from '@/lib/blog.d';
+import { Comment } from '@/lib/blog.d';
+import React from 'react';
 
-const getSeverity = (status: string) => {
-    if (status == 'publish' || 'future' || 'draft' || 'pending') {
+const getSeverity = (status: boolean) => {
+    if (status) {
         return 'outline';
     } else {
         return 'destructive';
     }
 };
 
-export const columns: ColumnDef<Post>[] = [
+export const columns: ColumnDef<Comment>[] = [
     {
         id: 'select',
         header: ({ table }) => (
@@ -36,18 +37,12 @@ export const columns: ColumnDef<Post>[] = [
         enableHiding: false
     },
     {
-        accessorKey: 'title',
-        header: 'TITLE'
+        accessorKey: 'posts.title',
+        header: 'POST'
     },
     {
-        accessorKey: 'views',
-        header: 'VIEWS',
-        enableSorting: true,
-        enableHiding: true
-    },
-    {
-        accessorKey: 'excerpt',
-        header: 'EXCERPT',
+        accessorKey: 'content',
+        header: 'CONTENT',
         enableSorting: false,
         cell: ({ row }) => {
             return (
@@ -56,11 +51,24 @@ export const columns: ColumnDef<Post>[] = [
                         <Tooltip>
                             <TooltipTrigger>
                                 <div>
-                                    {String(row.getValue('excerpt')).slice(0, 50).concat('...')}
+                                    {/*{String(row.getValue('content')).slice(0, 50).concat('...')}*/}
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: String(row.getValue('content'))
+                                                .slice(0, 50)
+                                                .concat('...')
+                                        }}
+                                    ></span>
                                 </div>
                             </TooltipTrigger>
                             <TooltipContent>
-                                <p>{row.getValue('excerpt')}</p>
+                                <p>
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: row.getValue('content')
+                                        }}
+                                    ></span>
+                                </p>
                             </TooltipContent>
                         </Tooltip>
                     }
@@ -69,14 +77,14 @@ export const columns: ColumnDef<Post>[] = [
         }
     },
     {
-        accessorKey: 'status',
-        header: 'STATUS',
+        accessorKey: 'approved',
+        header: 'APPROVED',
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
                     {
-                        <Badge variant={getSeverity(row.getValue('status'))}>
-                            {row.getValue('status')}
+                        <Badge variant={getSeverity(row.getValue('approved'))}>
+                            {row.getValue('approved') == true ? 'True' : 'False'}
                         </Badge>
                     }
                 </div>

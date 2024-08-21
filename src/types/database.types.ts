@@ -38,6 +38,7 @@ export type Database = {
                     name: string;
                     slug: string;
                     url: string | null;
+                    user_id: string | null;
                 };
                 Insert: {
                     description?: string | null;
@@ -47,6 +48,7 @@ export type Database = {
                     name: string;
                     slug: string;
                     url?: string | null;
+                    user_id?: string | null;
                 };
                 Update: {
                     description?: string | null;
@@ -56,8 +58,17 @@ export type Database = {
                     name?: string;
                     slug?: string;
                     url?: string | null;
+                    user_id?: string | null;
                 };
-                Relationships: [];
+                Relationships: [
+                    {
+                        foreignKeyName: 'authors_user_id_fkey';
+                        columns: ['user_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'users';
+                        referencedColumns: ['id'];
+                    }
+                ];
             };
             categories: {
                 Row: {
@@ -178,7 +189,7 @@ export type Database = {
                     alt_text?: string | null;
                     author?: number | null;
                     caption?: string | null;
-                    date: string;
+                    date?: string;
                     id?: never;
                     link: string;
                     media_details?: Json | null;
@@ -187,7 +198,7 @@ export type Database = {
                     slug: string;
                     source_url?: string | null;
                     title: string;
-                    type: string;
+                    type?: string;
                 };
                 Update: {
                     alt_text?: string | null;
@@ -312,14 +323,14 @@ export type Database = {
                 };
                 Insert: {
                     author: number;
-                    comment_status: string;
+                    comment_status?: string;
                     content: string;
                     created_at?: string | null;
                     date: string;
                     date_gmt: string;
                     excerpt: string;
                     featured_media?: number | null;
-                    guid: string;
+                    guid?: string;
                     id?: never;
                     link: string;
                     menu_order?: number | null;
@@ -327,12 +338,12 @@ export type Database = {
                     modified: string;
                     modified_gmt: string;
                     parent?: number | null;
-                    ping_status: string;
+                    ping_status?: string;
                     slug: string;
-                    status: string;
-                    template: string;
+                    status?: string;
+                    template?: string;
                     title: string;
-                    type: string;
+                    type?: string;
                     updated_at?: string | null;
                 };
                 Update: {
@@ -475,31 +486,31 @@ export type Database = {
                     views: number | null;
                 };
                 Insert: {
-                    author: number;
+                    author?: number;
                     categories?: Json | null;
                     claps?: number | null;
-                    comment_status: string;
+                    comment_status?: string;
                     content: string;
                     created_at?: string | null;
-                    date: string;
-                    date_gmt: string;
+                    date?: string;
+                    date_gmt?: string;
                     excerpt: string;
                     featured_media?: number | null;
-                    format: string;
-                    guid: string;
+                    format?: string;
+                    guid?: string;
                     id?: never;
                     link: string;
                     meta?: Json | null;
-                    modified: string;
-                    modified_gmt: string;
-                    ping_status: string;
+                    modified?: string;
+                    modified_gmt?: string;
+                    ping_status?: string;
                     slug: string;
-                    status: string;
+                    status?: string;
                     sticky?: boolean;
                     tags?: Json | null;
-                    template: string;
+                    template?: string;
                     title: string;
-                    type: string;
+                    type?: string;
                     updated_at?: string | null;
                     views?: number | null;
                 };
@@ -591,7 +602,7 @@ export type Database = {
                 };
                 Insert: {
                     email?: string | null;
-                    id: string;
+                    id?: string;
                     image?: string | null;
                     name?: string | null;
                 };

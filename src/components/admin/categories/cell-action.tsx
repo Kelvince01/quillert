@@ -12,12 +12,12 @@ import {
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { Post } from '@/lib/blog.d';
+import { Category } from '@/lib/blog.d';
 import { createClient } from '@/utils/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 
 interface CellActionProps {
-    data: Post;
+    data: Category;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -25,21 +25,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const supabase = createClient();
-    const postId = data.id;
+    const categoryId = data.id;
     const { toast } = useToast();
 
     const onConfirm = async () => {
-        const { error } = await supabase.from('posts').delete().eq('id', postId);
+        const { error } = await supabase.from('categories').delete().eq('id', categoryId);
         if (error) {
             toast({
                 variant: 'destructive',
                 title: 'Failed',
-                description: 'Post deletion failed'
+                description: 'Category deletion failed'
             });
         }
         toast({
             title: 'Success',
-            description: 'Post deleted successfully'
+            description: 'Category deleted successfully'
         });
     };
 
@@ -60,8 +60,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-                    <DropdownMenuItem onClick={() => router.push(`/admin/posts/${postId}`)}>
+                    <DropdownMenuItem
+                        onClick={() => router.push(`/admin/categories/${categoryId}`)}
+                    >
                         <Edit className="mr-2 h-4 w-4" /> Update
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setOpen(true)}>

@@ -7,7 +7,8 @@ import Image from 'next/image';
 import { UploadFileResponse } from 'uploadthing/client';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
-import { IMG_MAX_LIMIT } from '@/components/admin/posts/post-form';
+
+export const IMG_MAX_LIMIT = 1;
 
 interface ImageUploadProps {
     onChange?: any;
@@ -18,6 +19,7 @@ interface ImageUploadProps {
 export default function FileUpload({ onChange, onRemove, value }: ImageUploadProps) {
     const { toast } = useToast();
 
+    // console.log(value);
     const onDeleteFile = (key: string) => {
         const files = value;
         let filteredFiles = files.filter((item) => item.key !== key);

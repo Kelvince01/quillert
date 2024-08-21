@@ -1,5 +1,6 @@
 import '@/styles/kmenu-variables.css';
 import 'kmenu/dist/cmdk.css';
+import '@uploadthing/react/styles.css';
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import '../styles/globals.css';

@@ -325,6 +325,20 @@ export async function getAuthorBySlug(slug: string): Promise<Author> {
     return data || null; // Return null if no user found
 }
 
+export async function getAuthorByUserId(userId: string): Promise<Author> {
+    const { data, error } = await supabase
+        .from('authors')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
+    return data || null; // Return null if no user found
+}
+
 export async function getPostsByAuthor(authorId: number): Promise<Post[]> {
     const { data, error } = await supabase
         .from('posts')

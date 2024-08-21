@@ -16,9 +16,31 @@ export async function generateMetadata({
     params: { slug: string };
 }): Promise<Metadata> {
     const post = await getPostBySlug(params.slug);
+    const featuredMedia = await getFeaturedMediaById(post.featured_media);
+
     return {
         title: post.title,
-        description: post.excerpt
+        description: post.excerpt,
+        openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            type: 'article',
+            publishedTime: post.date,
+            url: post.link,
+            images: featuredMedia.source_url
+                ? [
+                      {
+                          url: featuredMedia.source_url
+                      }
+                  ]
+                : []
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.excerpt,
+            images: featuredMedia.source_url ? [featuredMedia.source_url] : []
+        }
     };
 }
 

@@ -8,16 +8,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ReplyIcon, ThumbsDownIcon, ThumbsUpIcon } from 'lucide-react';
 import { useHumanizedTimeSince } from '@/hooks/use-humanized-time-since';
-
-interface Comment {
-    id: string;
-    user_id: string;
-    parent_id?: string;
-    content: string;
-    approved: boolean;
-    created_at: string;
-    children?: Comment[];
-}
+import { User } from '@supabase/supabase-js';
+// import { getFirstTwoLetters, getUsernameFromEmail } from '@/lib/utils';
+import { Comment } from '@/lib/blog.d';
 
 function CommentThread({
     comment,
@@ -29,6 +22,28 @@ function CommentThread({
     depth?: number;
 }) {
     const [showReplyForm, setShowReplyForm] = useState(false);
+    const supabase = createClient();
+
+    async function getCommentUser(id: string): Promise<User> {
+        const { data, error } = await supabase.auth.admin.getUserById(id);
+        if (error) throw error;
+        return data.user;
+    }
+
+    const useGetCommentUser = (userId: string) => {
+        const [user, setUser] = useState<User | null>(null);
+
+        const getCommentUserCallback = useCallback(async () => {
+            const user = await getCommentUser(userId);
+            setUser(user);
+        }, [userId]);
+
+        useEffect(() => {
+            getCommentUserCallback();
+        });
+
+        return user!;
+    };
 
     return (
         <div style={{ marginLeft: `${depth * 20}px` }} className="mt-4">
@@ -36,12 +51,20 @@ function CommentThread({
 
             <div className="flex items-start gap-4">
                 <Avatar className="w-10 h-10 border">
-                    <AvatarImage src="/placeholder-user.jpg" />
-                    <AvatarFallback>RU</AvatarFallback>
+                    <AvatarImage src="/placeholder-user1.jpg" />
+                    <AvatarFallback>
+                        {/*{getFirstTwoLetters(*/}
+                        {/*    getUsernameFromEmail(useGetCommentUser(comment.user_id)?.email!)*/}
+                        {/*)}*/}
+                        RU
+                    </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="font-medium">Rand User</div>
+                        <div className="font-medium">
+                            {/*{getUsernameFromEmail(useGetCommentUser(comment.user_id)?.email!)}*/}
+                            Rand User
+                        </div>
                         <div className="text-xs text-muted-foreground">
                             {useHumanizedTimeSince(comment.created_at)} ago
                         </div>

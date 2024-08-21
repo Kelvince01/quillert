@@ -12,12 +12,13 @@ import {
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { Post } from '@/lib/blog.d';
+import { Comment } from '@/lib/blog.d';
 import { createClient } from '@/utils/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
+import { CommentApproval } from '@/components/comments/approve-comment';
 
 interface CellActionProps {
-    data: Post;
+    data: Comment;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -25,21 +26,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const supabase = createClient();
-    const postId = data.id;
+    const commentId = data.id;
     const { toast } = useToast();
 
     const onConfirm = async () => {
-        const { error } = await supabase.from('posts').delete().eq('id', postId);
+        const { error } = await supabase.from('comments').delete().eq('id', commentId);
         if (error) {
             toast({
                 variant: 'destructive',
                 title: 'Failed',
-                description: 'Post deletion failed'
+                description: 'Comment deletion failed'
             });
         }
         toast({
             title: 'Success',
-            description: 'Post deleted successfully'
+            description: 'Comment deleted successfully'
         });
     };
 
@@ -61,9 +62,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-                    <DropdownMenuItem onClick={() => router.push(`/admin/posts/${postId}`)}>
-                        <Edit className="mr-2 h-4 w-4" /> Update
+                    <DropdownMenuItem>
+                        <CommentApproval comment={data} />
                     </DropdownMenuItem>
+                    {/*<DropdownMenuItem onClick={() => router.push(`/admin/comments/${commentId}`)}>*/}
+                    {/*    <Edit className="mr-2 h-4 w-4" /> Update*/}
+                    {/*</DropdownMenuItem>*/}
                     <DropdownMenuItem onClick={() => setOpen(true)}>
                         <Trash className="mr-2 h-4 w-4" /> Delete
                     </DropdownMenuItem>

@@ -1,21 +1,13 @@
 'use client';
 
 import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { Post } from '@/lib/blog.d';
+import { Category } from '@/lib/blog.d';
+import React from 'react';
 
-const getSeverity = (status: string) => {
-    if (status == 'publish' || 'future' || 'draft' || 'pending') {
-        return 'outline';
-    } else {
-        return 'destructive';
-    }
-};
-
-export const columns: ColumnDef<Post>[] = [
+export const columns: ColumnDef<Category>[] = [
     {
         id: 'select',
         header: ({ table }) => (
@@ -36,18 +28,16 @@ export const columns: ColumnDef<Post>[] = [
         enableHiding: false
     },
     {
-        accessorKey: 'title',
-        header: 'TITLE'
+        accessorKey: 'name',
+        header: 'NAME'
     },
     {
-        accessorKey: 'views',
-        header: 'VIEWS',
-        enableSorting: true,
-        enableHiding: true
+        accessorKey: 'categories.name',
+        header: 'PARENT'
     },
     {
-        accessorKey: 'excerpt',
-        header: 'EXCERPT',
+        accessorKey: 'description',
+        header: 'DESCRIPTION',
         enableSorting: false,
         cell: ({ row }) => {
             return (
@@ -56,43 +46,14 @@ export const columns: ColumnDef<Post>[] = [
                         <Tooltip>
                             <TooltipTrigger>
                                 <div>
-                                    {String(row.getValue('excerpt')).slice(0, 50).concat('...')}
+                                    {String(row.getValue('description')).slice(0, 50).concat('...')}
                                 </div>
                             </TooltipTrigger>
                             <TooltipContent>
-                                <p>{row.getValue('excerpt')}</p>
+                                <p>{row.getValue('description')}</p>
                             </TooltipContent>
                         </Tooltip>
                     }
-                </div>
-            );
-        }
-    },
-    {
-        accessorKey: 'status',
-        header: 'STATUS',
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    {
-                        <Badge variant={getSeverity(row.getValue('status'))}>
-                            {row.getValue('status')}
-                        </Badge>
-                    }
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
-        }
-    },
-    {
-        accessorKey: 'created_at',
-        header: 'CREATED AT',
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    {new Date(row.getValue('created_at')).toDateString()}
                 </div>
             );
         }

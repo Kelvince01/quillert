@@ -15,6 +15,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { createClient } from '@/utils/supabase/client';
 import { useUser } from '@/hooks/use-user';
 import Tiptap from '../ui/tiptap';
+import { ToastAction } from '../ui/toast';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     content: z.string().min(1, {
@@ -34,6 +36,7 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
     const supabase = createClient();
     const { user } = useUser();
     const { toast } = useToast();
+    const router = useRouter();
 
     const form = useForm<CommentFormValues>({
         resolver: zodResolver(formSchema),
@@ -47,7 +50,17 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
             toast({
                 title: 'Authentication required',
                 description: 'You must be logged in to post a comment.',
-                variant: 'destructive'
+                variant: 'destructive',
+                action: (
+                    <ToastAction
+                        altText="Goto login page"
+                        onClick={() => {
+                            router.push('/accounts/login');
+                        }}
+                    >
+                        Login
+                    </ToastAction>
+                )
             });
             return;
         }
