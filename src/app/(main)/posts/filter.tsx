@@ -7,23 +7,9 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from '@/components/ui/select'; // Ensure this is the correct import path
-import { Button } from '@/components/ui/button'; // Add this import for the Button component
-
-interface Author {
-    id: number;
-    name: string;
-}
-
-interface Tag {
-    id: number;
-    name: string;
-}
-
-interface Category {
-    id: number;
-    name: string;
-}
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Category, Tag, Author } from '@/lib/blog.d';
 
 interface FilterPostsProps {
     authors: Author[];
@@ -71,7 +57,7 @@ export default function FilterPosts({
                 <SelectContent>
                     <SelectItem value="all">All Tags</SelectItem>
                     {tags.map((tag) => (
-                        <SelectItem key={tag.id} value={tag.id.toString()}>
+                        <SelectItem key={tag.id} value={tag?.id!.toString()}>
                             {tag.name}
                         </SelectItem>
                     ))}
@@ -88,7 +74,7 @@ export default function FilterPosts({
                 <SelectContent>
                     <SelectItem value="all">All Categories</SelectItem>
                     {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id.toString()}>
+                        <SelectItem key={category.id} value={category?.id!.toString()}>
                             {category.name}
                         </SelectItem>
                     ))}
