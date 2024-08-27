@@ -6,7 +6,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const allPosts = await getAllPosts();
     const posts = allPosts.map((post) => ({
         url: `${getURL()}/posts/${post.slug}`,
-        lastModified: new Date(post.date).toISOString()
+        lastModified: new Date(post.date).toISOString(),
+        // changeFrequency: 'daily',
+        priority: 1
     }));
 
     return [
@@ -15,6 +17,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             lastModified: new Date(),
             changeFrequency: 'yearly',
             priority: 1
+        },
+        {
+            url: `${getURL()}/accounts/login`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.8
+        },
+        {
+            url: `${getURL()}/accounts/register`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.8
         },
         {
             url: `${getURL()}/pages/about`,
@@ -29,19 +43,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.5
         },
         {
-            url: `${getURL()}/tags`,
+            url: `${getURL()}/posts/tags`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.5
         },
         {
-            url: `${getURL()}/categories`,
+            url: `${getURL()}/posts/categories`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.5
         },
         {
-            url: `${getURL()}/authors`,
+            url: `${getURL()}/posts/authors`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.5
