@@ -11,6 +11,7 @@ const Tiptap: React.FC<{
     onChange: (html: string) => void;
 }> = ({ initialValue, onChange }) => {
     const editor = useEditor({
+        immediatelyRender: false,
         editorProps: {
             attributes: {
                 // Add styles to editor element

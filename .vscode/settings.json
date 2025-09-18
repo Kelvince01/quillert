@@ -8,7 +8,21 @@
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "cSpell.words": [
-    "advlist"
+    "advlist",
+    "apikey",
+    "cmdk",
+    "inbucket",
+    "kmenu",
+    "pooler",
+    "quillert",
+    "sendgrid",
+    "shadcn",
+    "signup",
+    "signups",
+    "supabase",
+    "timebox",
+    "uploadthing",
+    "usehooks"
   ],
   "editor.formatOnSave": true
 }

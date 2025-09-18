@@ -58,7 +58,7 @@ export default function PostShare({
 
     return (
         <Popover>
-            <PopoverTrigger>
+            <PopoverTrigger asChild>
                 <button className="flex items-center gap-x-2 text-sm text-gray-500 hover:text-gray-800 dark:text-neutral-200 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
                     <GoShare className="flex-shrink-0 size-4" />
                     Share

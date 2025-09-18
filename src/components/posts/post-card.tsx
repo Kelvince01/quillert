@@ -9,7 +9,7 @@ import { getFeaturedMediaById, getAuthorById, getCategoryById } from '@/lib/blog
 export default async function PostCard({ post }: { post: Post }) {
     const media = await getFeaturedMediaById(post.featured_media);
     const author = await getAuthorById(post.author);
-    const date = new Date(post.date).toLocaleDateString('en-US', {
+    const date = new Date(post.date).toLocaleDateString('en-KE', {
         month: 'long',
         day: 'numeric',
         year: 'numeric'
