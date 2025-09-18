@@ -33,7 +33,11 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
                                 className="w-full"
                                 onClick={() => {
                                     if (maxTags && tags.length >= maxTags) return;
-                                    if (!allowDuplicates && tags.some((tag) => tag.title === option.title)) return;
+                                    if (
+                                        !allowDuplicates &&
+                                        tags.some((tag) => tag.title === option.title)
+                                    )
+                                        return;
                                     setTags([...tags, option]);
                                     onTagAdd?.(option.title);
                                 }}

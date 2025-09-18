@@ -5,62 +5,66 @@ import { TagInputProps, type Tag as TagType } from './tag-input';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-export const tagVariants = cva('transition-all border inline-flex items-center text-sm pl-2 rounded-md', {
-    variants: {
-        variant: {
-            default: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-            primary: 'bg-primary border-primary text-primary-foreground hover:bg-primary/90',
-            destructive: 'bg-destructive border-destructive text-destructive-foreground hover:bg-destructive/90'
+export const tagVariants = cva(
+    'transition-all border inline-flex items-center text-sm pl-2 rounded-md',
+    {
+        variants: {
+            variant: {
+                default: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+                primary: 'bg-primary border-primary text-primary-foreground hover:bg-primary/90',
+                destructive:
+                    'bg-destructive border-destructive text-destructive-foreground hover:bg-destructive/90'
+            },
+            size: {
+                sm: 'text-xs h-7',
+                md: 'text-sm h-8',
+                lg: 'text-base h-9',
+                xl: 'text-lg h-10'
+            },
+            shape: {
+                default: 'rounded-sm',
+                rounded: 'rounded-lg',
+                square: 'rounded-none',
+                pill: 'rounded-full'
+            },
+            borderStyle: {
+                default: 'border-solid',
+                none: 'border-none'
+            },
+            textCase: {
+                uppercase: 'uppercase',
+                lowercase: 'lowercase',
+                capitalize: 'capitalize'
+            },
+            interaction: {
+                clickable: 'cursor-pointer hover:shadow-md',
+                nonClickable: 'cursor-default'
+            },
+            animation: {
+                none: '',
+                fadeIn: 'animate-fadeIn',
+                slideIn: 'animate-slideIn',
+                bounce: 'animate-bounce'
+            },
+            textStyle: {
+                normal: 'font-normal',
+                bold: 'font-bold',
+                italic: 'italic',
+                underline: 'underline',
+                lineThrough: 'line-through'
+            }
         },
-        size: {
-            sm: 'text-xs h-7',
-            md: 'text-sm h-8',
-            lg: 'text-base h-9',
-            xl: 'text-lg h-10'
-        },
-        shape: {
-            default: 'rounded-sm',
-            rounded: 'rounded-lg',
-            square: 'rounded-none',
-            pill: 'rounded-full'
-        },
-        borderStyle: {
-            default: 'border-solid',
-            none: 'border-none'
-        },
-        textCase: {
-            uppercase: 'uppercase',
-            lowercase: 'lowercase',
-            capitalize: 'capitalize'
-        },
-        interaction: {
-            clickable: 'cursor-pointer hover:shadow-md',
-            nonClickable: 'cursor-default'
-        },
-        animation: {
-            none: '',
-            fadeIn: 'animate-fadeIn',
-            slideIn: 'animate-slideIn',
-            bounce: 'animate-bounce'
-        },
-        textStyle: {
-            normal: 'font-normal',
-            bold: 'font-bold',
-            italic: 'italic',
-            underline: 'underline',
-            lineThrough: 'line-through'
+        defaultVariants: {
+            variant: 'default',
+            size: 'md',
+            shape: 'default',
+            borderStyle: 'default',
+            interaction: 'nonClickable',
+            animation: 'fadeIn',
+            textStyle: 'normal'
         }
-    },
-    defaultVariants: {
-        variant: 'default',
-        size: 'md',
-        shape: 'default',
-        borderStyle: 'default',
-        interaction: 'nonClickable',
-        animation: 'fadeIn',
-        textStyle: 'normal'
     }
-});
+);
 
 export type TagProps = {
     tagObj: TagType;

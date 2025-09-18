@@ -42,7 +42,11 @@ export const TagList: React.FC<TagListProps> = ({
             })}
         >
             {draggable ? (
-                <SortableList onSortEnd={onSortEnd} className="flex flex-wrap gap-2 list" dropTarget={<DropTarget />}>
+                <SortableList
+                    onSortEnd={onSortEnd}
+                    className="flex flex-wrap gap-2 list"
+                    dropTarget={<DropTarget />}
+                >
                     {tags.map((tagObj) => (
                         <SortableItem key={tagObj.id}>
                             <div
@@ -50,7 +54,8 @@ export const TagList: React.FC<TagListProps> = ({
                                 onMouseLeave={handleMouseUp}
                                 className={cn(
                                     {
-                                        'border border-solid border-primary rounded-md': draggedTagId === tagObj.id
+                                        'border border-solid border-primary rounded-md':
+                                            draggedTagId === tagObj.id
                                     },
                                     'transition-all duration-200 ease-in-out'
                                 )}
