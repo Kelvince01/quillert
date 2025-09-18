@@ -12,6 +12,7 @@
     "apikey",
     "cmdk",
     "inbucket",
+    "KEEPALIVE",
     "kmenu",
     "pooler",
     "quillert",
@@ -21,6 +22,7 @@
     "signups",
     "supabase",
     "timebox",
+    "TINYMCE",
     "uploadthing",
     "usehooks"
   ],

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import {
     Dialog,
@@ -39,11 +39,11 @@ export function CategoryInsertDialog() {
     const { toast } = useToast();
     const router = useRouter();
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         const { data, error } = await supabase.from('categories').select('id, name');
         if (error) console.error('Error fetching categories:', error);
         else setCategories(data);
-    };
+    }, [supabase]);
 
     useEffect(() => {
         fetchCategories();
